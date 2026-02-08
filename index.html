@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="La Vecindad del Perro - Spa y salón de belleza para mascotas en SJL. Servicios de baño, grooming, indumentaria y más. Dale a tu peludo el cuidado que merece.">
+    <title>La Vecindad del Perro | Spa para Mascotas en SJL</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav container">
+            <a href="#" class="logo">
+                <span class="logo-icon">🐕</span>
+                <span class="logo-text">La Vecindad del Perro</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#servicios">Servicios</a></li>
+                <li><a href="#galeria">Galería</a></li>
+                <li><a href="#testimonios">Testimonios</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+            <a href="#contacto" class="btn btn-primary">Reservar Cita</a>
+            <button class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="hero-bg"></div>
+        <div class="container hero-content">
+            <div class="hero-text">
+                <span class="hero-badge">✨ Cuidado Premium para tu Mascota</span>
+                <h1>Dale a tu peludo el <span class="gradient-text">spa que merece</span></h1>
+                <p>Ofrecemos servicios de baño, grooming, indumentaria y cuidados especiales para que tu mascota luzca y se sienta increíble.</p>
+                <div class="hero-buttons">
+                    <a href="#servicios" class="btn btn-primary btn-lg">Ver Servicios</a>
+                    <a href="#contacto" class="btn btn-outline btn-lg">Agendar Cita</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">500+</span>
+                        <span class="stat-label">Mascotas Felices</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">5</span>
+                        <span class="stat-label">Años de Experiencia</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">4.9</span>
+                        <span class="stat-label">Calificación ⭐</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="hero-image-wrapper">
+                    <div class="floating-card card-1">
+                        <span>🛁</span>
+                        <p>Baño Relajante</p>
+                    </div>
+                    <div class="floating-card card-2">
+                        <span>✂️</span>
+                        <p>Corte Profesional</p>
+                    </div>
+                    <div class="floating-card card-3">
+                        <span>🎀</span>
+                        <p>Estilo Único</p>
+                    </div>
+                    <div class="hero-img-placeholder">
+                        <span>🐕</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-wave">
+            <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="white"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="servicios">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Nuestros Servicios</span>
+                <h2>Todo lo que tu mascota <span class="gradient-text">necesita</span></h2>
+                <p>Contamos con servicios especializados para el cuidado integral de tu compañero peludo</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">🛁</div>
+                    <h3>Baño Completo</h3>
+                    <p>Baño con productos premium, secado profesional y cepillado. Incluye limpieza de oídos y corte de uñas.</p>
+                    <ul class="service-features">
+                        <li>✓ Shampoo hipoalergénico</li>
+                        <li>✓ Acondicionador nutritivo</li>
+                        <li>✓ Secado con aire tibio</li>
+                    </ul>
+                    <span class="service-price">Desde S/35</span>
+                </div>
+                <div class="service-card featured">
+                    <div class="service-badge">⭐ Popular</div>
+                    <div class="service-icon">✂️</div>
+                    <h3>Grooming Completo</h3>
+                    <p>Baño + corte de pelo según la raza, diseño personalizado y acabado profesional.</p>
+                    <ul class="service-features">
+                        <li>✓ Corte según estándar de raza</li>
+                        <li>✓ Diseños personalizados</li>
+                        <li>✓ Perfume y lazo/pañuelo</li>
+                    </ul>
+                    <span class="service-price">Desde S/55</span>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">👗</div>
+                    <h3>Indumentaria</h3>
+                    <p>Ropa, accesorios y disfraces para que tu mascota luzca a la moda en cualquier ocasión.</p>
+                    <ul class="service-features">
+                        <li>✓ Ropa para todas las tallas</li>
+                        <li>✓ Accesorios exclusivos</li>
+                        <li>✓ Disfraces temáticos</li>
+                    </ul>
+                    <span class="service-price">Ver catálogo</span>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">💅</div>
+                    <h3>Spa Relax</h3>
+                    <p>Tratamiento de aromaterapia, masajes relajantes y baño de burbujas para consentir a tu peludo.</p>
+                    <ul class="service-features">
+                        <li>✓ Masaje relajante</li>
+                        <li>✓ Aromaterapia natural</li>
+                        <li>✓ Baño de burbujas</li>
+                    </ul>
+                    <span class="service-price">Desde S/65</span>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🦷</div>
+                    <h3>Higiene Dental</h3>
+                    <p>Limpieza dental profesional para mantener la salud bucal de tu mascota.</p>
+                    <ul class="service-features">
+                        <li>✓ Limpieza profunda</li>
+                        <li>✓ Tratamiento antisarro</li>
+                        <li>✓ Aliento fresco</li>
+                    </ul>
+                    <span class="service-price">Desde S/25</span>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🚗</div>
+                    <h3>Servicio a Domicilio</h3>
+                    <p>Llevamos nuestro spa hasta la comodidad de tu hogar. Tu mascota no tiene que salir de casa.</p>
+                    <ul class="service-features">
+                        <li>✓ Equipamiento completo</li>
+                        <li>✓ Horarios flexibles</li>
+                        <li>✓ Sin estrés de transporte</li>
+                    </ul>
+                    <span class="service-price">Consultar</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="why-us">
+        <div class="container">
+            <div class="why-us-content">
+                <div class="why-us-text">
+                    <span class="section-badge">¿Por qué elegirnos?</span>
+                    <h2>Cuidamos a tu mascota como <span class="gradient-text">si fuera nuestra</span></h2>
+                    <div class="why-us-features">
+                        <div class="feature">
+                            <div class="feature-icon">🏆</div>
+                            <div class="feature-content">
+                                <h4>Personal Certificado</h4>
+                                <p>Nuestro equipo está capacitado en las mejores técnicas de grooming y cuidado animal.</p>
+                            </div>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">🌿</div>
+                            <div class="feature-content">
+                                <h4>Productos Naturales</h4>
+                                <p>Utilizamos productos eco-friendly e hipoalergénicos para el cuidado de la piel.</p>
+                            </div>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">❤️</div>
+                            <div class="feature-content">
+                                <h4>Amor por los Animales</h4>
+                                <p>Tratamos a cada mascota con paciencia, cariño y respeto por su bienestar.</p>
+                            </div>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">📱</div>
+                            <div class="feature-content">
+                                <h4>Seguimiento en Tiempo Real</h4>
+                                <p>Te enviamos fotos y actualizaciones mientras cuidamos de tu peludo.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="why-us-image">
+                    <div class="image-placeholder">
+                        <span>🐱</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section class="gallery" id="galeria">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Galería</span>
+                <h2>Nuestros clientes <span class="gradient-text">más felices</span></h2>
+                <p>Mira las transformaciones increíbles de nuestras mascotas consentidas</p>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item large">
+                    <div class="gallery-placeholder">🐕</div>
+                    <div class="gallery-overlay">
+                        <span>Max - Golden Retriever</span>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-placeholder">🐩</div>
+                    <div class="gallery-overlay">
+                        <span>Luna - Poodle</span>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-placeholder">🐱</div>
+                    <div class="gallery-overlay">
+                        <span>Michi - Persa</span>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-placeholder">🐕‍🦺</div>
+                    <div class="gallery-overlay">
+                        <span>Rocky - Husky</span>
+                    </div>
+                </div>
+                <div class="gallery-item large">
+                    <div class="gallery-placeholder">🦮</div>
+                    <div class="gallery-overlay">
+                        <span>Coco - Labrador</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials" id="testimonios">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Testimonios</span>
+                <h2>Lo que dicen nuestros <span class="gradient-text">clientes</span></h2>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
+                    <p>"Increíble servicio. Mi perrita siempre sale feliz y hermosa. El personal es muy amable y profesional."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">M</div>
+                        <div class="author-info">
+                            <strong>María García</strong>
+                            <span>Dueña de Lola</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
+                    <p>"El mejor spa para mascotas de la ciudad. Los productos que usan son de primera calidad y se nota en el pelaje."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">C</div>
+                        <div class="author-info">
+                            <strong>Carlos Mendoza</strong>
+                            <span>Dueño de Bruno</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
+                    <p>"Mi gato es muy nervioso pero aquí lo tratan con mucha paciencia. Súper recomendado para mascotas sensibles."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">A</div>
+                        <div class="author-info">
+                            <strong>Ana Torres</strong>
+                            <span>Dueña de Simba</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contacto">
+        <div class="container">
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <span class="section-badge">Contáctanos</span>
+                    <h2>Agenda tu cita <span class="gradient-text">hoy</span></h2>
+                    <p>Estamos listos para consentir a tu mascota. Contáctanos por cualquiera de estos medios.</p>
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <span class="contact-icon">📍</span>
+                            <div>
+                                <strong>Dirección</strong>
+                                <p>Mz P1 Lote 26, Montenegro, SJL</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-icon">📞</span>
+                            <div>
+                                <strong>WhatsApp</strong>
+                                <p><a href="https://wa.me/51970716064" style="color: var(--primary);">970 716 064</a></p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-icon">🕐</span>
+                            <div>
+                                <strong>Horario</strong>
+                                <p>7:00 AM - 8:00 PM</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="https://wa.me/51970716064" class="social-link" title="WhatsApp">💬</a>
+                    </div>
+                </div>
+                <div class="contact-form-wrapper">
+                    <form class="contact-form" id="contactForm">
+                        <h3>Reserva tu cita</h3>
+                        <div class="form-group">
+                            <input type="text" id="name" placeholder="Tu nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="tel" id="phone" placeholder="Tu teléfono" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="petName" placeholder="Nombre de tu mascota" required>
+                        </div>
+                        <div class="form-group">
+                            <select id="service" required>
+                                <option value="">Selecciona un servicio</option>
+                                <option value="bano">Baño Completo</option>
+                                <option value="grooming">Grooming Completo</option>
+                                <option value="spa">Spa Relax</option>
+                                <option value="dental">Higiene Dental</option>
+                                <option value="domicilio">Servicio a Domicilio</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="message" placeholder="Mensaje adicional (opcional)"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Enviar Reserva</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <span class="logo-icon">🐕</span>
+                        <span class="logo-text">La Vecindad del Perro</span>
+                    </a>
+                    <p>Cuidando a tus mascotas con amor y profesionalismo.</p>
+                    <p style="margin-top: 10px;">📍 Mz P1 Lote 26, Montenegro, SJL</p>
+                    <p>📱 <a href="https://wa.me/51970716064" style="color: rgba(255,255,255,0.9);">970 716 064</a></p>
+                </div>
+                <div class="footer-links">
+                    <h4>Enlaces</h4>
+                    <ul>
+                        <li><a href="#inicio">Inicio</a></li>
+                        <li><a href="#servicios">Servicios</a></li>
+                        <li><a href="#galeria">Galería</a></li>
+                        <li><a href="#contacto">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Servicios</h4>
+                    <ul>
+                        <li><a href="#servicios">Baño Completo</a></li>
+                        <li><a href="#servicios">Grooming</a></li>
+                        <li><a href="#servicios">Spa Relax</a></li>
+                        <li><a href="#servicios">Indumentaria</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 La Vecindad del Perro. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chatbot Widget -->
+    <div class="chatbot-container" id="chatbot">
+        <div class="chatbot-header">
+            <div class="chatbot-title">
+                <span class="chatbot-avatar">🐾</span>
+                <div>
+                    <strong>Asistente La Vecindad</strong>
+                    <span class="chatbot-status">En línea</span>
+                </div>
+            </div>
+            <button class="chatbot-close" id="chatbotClose">✕</button>
+        </div>
+        <div class="chatbot-messages" id="chatbotMessages">
+            <div class="chat-message bot">
+                <span class="message-avatar">🐾</span>
+                <div class="message-content">
+                    ¡Hola! 👋 Soy el asistente virtual de La Vecindad del Perro. ¿En qué puedo ayudarte?
+                    <div class="quick-replies">
+                        <button class="quick-reply" data-message="¿Cuáles son los servicios?">Servicios</button>
+                        <button class="quick-reply" data-message="¿Cuáles son los precios?">Precios</button>
+                        <button class="quick-reply" data-message="¿Cuál es el horario?">Horario</button>
+                        <button class="quick-reply" data-message="¿Dónde están ubicados?">Ubicación</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="chatbot-input-container">
+            <input type="text" class="chatbot-input" id="chatbotInput" placeholder="Escribe o habla tu mensaje...">
+            <button class="chatbot-mic" id="chatbotMic" title="Hablar">🎤</button>
+            <button class="chatbot-send" id="chatbotSend">➤</button>
+        </div>
+    </div>
+    <button class="chatbot-toggle" id="chatbotToggle">
+        <span class="toggle-icon">💬</span>
+        <span class="toggle-close">✕</span>
+    </button>
+
+    <script src="script.js"></script>
+    <script src="voice-client.js"></script>
+    <script src="chatbot.js"></script>
+</body>
+</html>
