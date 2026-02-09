@@ -174,20 +174,6 @@ class VoiceClient {
                 await this.audioContext.resume();
             }
 
-            // Diagnostic BEEP (Keep it for verification)
-            try {
-                const osc = this.audioContext.createOscillator();
-                const gain = this.audioContext.createGain();
-                osc.connect(gain);
-                gain.connect(this.audioContext.destination);
-                osc.frequency.value = 880;
-                gain.gain.value = 0.1;
-                osc.start();
-                osc.stop(this.audioContext.currentTime + 0.1);
-            } catch (e) {
-                console.log("Diagnostic beep failed:", e);
-            }
-
             this.mediaStream = await navigator.mediaDevices.getUserMedia({
                 audio: {
                     channelCount: 1,
