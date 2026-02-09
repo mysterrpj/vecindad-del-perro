@@ -231,7 +231,9 @@ class VoiceClient {
         const content = response.serverContent;
         if (content && content.modelTurn && content.modelTurn.parts) {
             for (const part of content.modelTurn.parts) {
-                if (part.inlineData && part.inlineData.mimeType.startsWith("audio/pcm")) {
+                if (part.text) {
+                    this.onResponseText(part.text);
+                } else if (part.inlineData && part.inlineData.mimeType.startsWith("audio/pcm")) {
                     this.playAudioChunk(part.inlineData.data);
                 }
             }
