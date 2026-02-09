@@ -161,44 +161,109 @@ class VoiceClient {
         }
 
         try {
-            this.audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
+            // Mobile detection: simple check for common mobile user agents
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+            // On mobile, let the browser choose the native sample rate to avoid audio glitches.
+            // On desktop, force 16000Hz as it works well with Gemini.
+            const audioConfig = isMobile ? {} : { sampleRate: 16000 };
+
+            this.audioContext = new (window.AudioContext || window.webkitAudioContext)(audioConfig);
 
             if (this.audioContext.state === 'suspended') {
                 await this.audioContext.resume();
             }
 
+            // Diagnostic BEEP (Keep it for verification)
+            try {
+                const osc = this.audioContext.createOscillator();
+                const gain = this.audioContext.createGain();
+                osc.connect(gain);
+                gain.connect(this.audioContext.destination);
+                osc.frequency.value = 880;
+                gain.gain.value = 0.1;
+                osc.start();
+                osc.stop(this.audioContext.currentTime + 0.1);
+            } catch (e) {
+                console.log("Diagnostic beep failed:", e);
+            }
+
             this.mediaStream = await navigator.mediaDevices.getUserMedia({
                 audio: {
                     channelCount: 1,
-                    sampleRate: 16000,
-                    echoCancellation: true,
-                    noiseSuppression: true,
-                    autoGainControl: true
+                    sampleRate: 16000
                 }
             });
 
             this.connect();
             this.startRecording();
-            this.safeStatusChange('listening');
-        } catch (e) {
-            console.error("Mic Access Error Details:", e.name, e.message);
-            alert(`Error de Micrófono: ${e.name}. Asegúrate de permitir el acceso.`);
-            this.safeStatusChange('error');
+
+        } catch (error) {
+            console.error("Error starting audio context:", error);
+            // Fallback for Safari/Legacy if needed
         }
     }
 
     startRecording() {
+        if (!this.audioContext) return;
+
+        // Create script processor for audio input
+        this.processor = this.audioContext.createScriptProcessor(4096, 1, 1);
+
         const source = this.audioContext.createMediaStreamSource(this.mediaStream);
-        this.processor = this.audioContext.createScriptProcessor(1024, 1, 1);
-
-        this.processor.onaudioprocess = (e) => {
-            const inputData = e.inputBuffer.getChannelData(0);
-            this.calculateAudioLevel(inputData);
-            this.sendAudioChunk(inputData);
-        };
-
         source.connect(this.processor);
         this.processor.connect(this.audioContext.destination);
+
+        this.processor.onaudioprocess = (e) => {
+            if (!this.ws || this.ws.readyState !== WebSocket.OPEN) return;
+
+            const inputData = e.inputBuffer.getChannelData(0);
+            this.calculateAudioLevel(inputData); // Calculate level from original input
+
+            // DOWNSAMPLING LOGIC:
+            // If AudioContext is running at native rate (e.g. 48000Hz on mobile)
+            // we MUST downsample to 16000Hz before sending to Gemini.
+            // Otherwise, Gemini will hear everything 3x faster ("chipmunk effect").
+
+            let audioToSend = inputData;
+            const currentSampleRate = this.audioContext.sampleRate;
+            const targetSampleRate = 16000;
+
+            if (currentSampleRate > targetSampleRate) {
+                audioToSend = this.downsampleBuffer(inputData, currentSampleRate, targetSampleRate);
+            }
+
+            const pcmData = this.floatTo16BitPCM(audioToSend);
+            const base64Audio = this.arrayBufferToBase64(pcmData);
+
+            const audioMessage = {
+                realtimeInput: {
+                    mediaChunks: [{
+                        mimeType: "audio/pcm",
+                        data: base64Audio
+                    }]
+                }
+            };
+
+            this.ws.send(JSON.stringify(audioMessage));
+        };
+    }
+
+    downsampleBuffer(buffer, inputRate, outputRate) {
+        if (outputRate >= inputRate) {
+            return buffer;
+        }
+
+        const sampleRatio = inputRate / outputRate;
+        const newLength = Math.round(buffer.length / sampleRatio);
+        const result = new Float32Array(newLength);
+
+        for (let i = 0; i < newLength; i++) {
+            const originalIndex = Math.round(i * sampleRatio);
+            result[i] = buffer[originalIndex] || 0;
+        }
+
+        return result;
     }
 
     calculateAudioLevel(inputData) {
@@ -208,23 +273,6 @@ class VoiceClient {
         }
         const rms = Math.sqrt(sum / (inputData.length / 4));
         this.onAudioLevel(rms);
-    }
-
-    sendAudioChunk(float32Array) {
-        if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-            const pcm16 = this.floatTo16BitPCM(float32Array);
-            const base64Audio = this.arrayBufferToBase64(pcm16);
-
-            const msg = {
-                realtimeInput: {
-                    mediaChunks: [{
-                        mimeType: "audio/pcm",
-                        data: base64Audio
-                    }]
-                }
-            };
-            this.ws.send(JSON.stringify(msg));
-        }
     }
 
     handleServerMessage(response) {

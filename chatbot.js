@@ -1,6 +1,6 @@
 // ===== CHATBOT UI PARA LA VECINDAD DEL PERRO =====
 
-const GEMINI_API_KEY = "AIzaSyDSOpXdu2Ndzn4apgjZHUzK5zkVkSzDID8";
+const GEMINI_API_KEY = "AIzaSyCIRLdfQ5F7pJmJbAlBMwKpJTs6B0k-iOU";
 
 let voiceClient = null;
 let isVoiceActive = false;
@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ===== CONTROL DE VOZ =====
-function startVoiceChat() {
+async function startVoiceChat() {
     if (voiceClient && isVoiceActive) {
         stopVoiceChat();
         return;
@@ -23,9 +23,14 @@ function startVoiceChat() {
         onResponseText: handleResponseText
     });
 
-    voiceClient.start();
-    isVoiceActive = true;
-    updateMicButton(true);
+    try {
+        await voiceClient.start();
+        isVoiceActive = true;
+        updateMicButton(true);
+    } catch (error) {
+        console.error("Error al iniciar chat de voz:", error);
+        handleStatusChange('error', error.message || 'Error de inicio');
+    }
 }
 
 function stopVoiceChat() {
@@ -40,7 +45,7 @@ function stopVoiceChat() {
 
 function handleStatusChange(status, detail) {
     console.log('Status:', status, detail);
-    
+
     switch (status) {
         case 'connected':
             showStatus('✅ Conectado');
@@ -147,7 +152,7 @@ function sendTextMessage() {
 function updateMicButton(active) {
     const mic = document.getElementById('chatbotMic');
     if (!mic) return;
-    
+
     if (active) {
         mic.classList.add('listening');
         mic.textContent = '🔴';
