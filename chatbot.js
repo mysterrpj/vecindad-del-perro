@@ -4,6 +4,8 @@ const GEMINI_API_KEY = "AIzaSyCIRLdfQ5F7pJmJbAlBMwKpJTs6B0k-iOU";
 
 let voiceClient = null;
 let isVoiceActive = false;
+let sessionTimeout = null;
+const SESSION_DURATION_MS = 5 * 60 * 1000; // 5 minutos
 
 // ===== INICIALIZACIÓN =====
 document.addEventListener('DOMContentLoaded', () => {
@@ -27,6 +29,15 @@ async function startVoiceChat() {
         await voiceClient.start();
         isVoiceActive = true;
         updateMicButton(true);
+
+        // Auto-desconectar después de 5 minutos para ahorrar crédito
+        sessionTimeout = setTimeout(() => {
+            if (isVoiceActive) {
+                stopVoiceChat();
+                showStatus('⏱️ Sesión terminada (5 min). Toca el micrófono para continuar.');
+            }
+        }, SESSION_DURATION_MS);
+
     } catch (error) {
         console.error("Error al iniciar chat de voz:", error);
         handleStatusChange('error', error.message || 'Error de inicio');
@@ -34,6 +45,12 @@ async function startVoiceChat() {
 }
 
 function stopVoiceChat() {
+    // Limpiar timeout si existe
+    if (sessionTimeout) {
+        clearTimeout(sessionTimeout);
+        sessionTimeout = null;
+    }
+
     if (voiceClient) {
         voiceClient.stop();
         voiceClient = null;
