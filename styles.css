@@ -210,6 +210,8 @@ body.dark-mode .search-box input {
 
 /* ===== Theme Toggle Button ===== */
 .theme-toggle {
+    position: relative;
+    /* For tooltip */
     background: none;
     border: 1px solid var(--border-color);
     width: 40px;
@@ -238,6 +240,43 @@ body.dark-mode .theme-toggle {
 
 body.dark-mode .theme-toggle:hover {
     background: rgba(255, 255, 255, 0.1);
+}
+
+/* Tooltip for Theme Toggle */
+.theme-toggle[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-dark);
+    color: white;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    white-space: nowrap;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: none;
+    z-index: 1000;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+}
+
+.theme-toggle[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition);
+}
+
+body.dark-mode .theme-toggle[data-tooltip]:hover::after {
+    background: white;
+    color: var(--bg-dark);
 }
 
 /* ===== Reset & Base ===== */

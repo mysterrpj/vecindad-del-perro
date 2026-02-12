@@ -28,9 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isDark) {
             iconLight.style.display = 'inline';
             iconDark.style.display = 'none';
+            document.getElementById('themeToggle').setAttribute('data-tooltip', 'Modo Claro');
         } else {
             iconLight.style.display = 'none';
             iconDark.style.display = 'inline';
+            document.getElementById('themeToggle').setAttribute('data-tooltip', 'Modo Oscuro');
         }
     }
 });
