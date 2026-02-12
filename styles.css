@@ -750,6 +750,67 @@ img {
     border: none;
 }
 
+/* Unique Service Card Colors - VIBRANT MODERN (Option B) */
+.service-card.card-blue {
+    background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
+    border-color: #2563eb;
+    color: white;
+}
+
+.service-card.card-purple {
+    background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);
+    border-color: #7c3aed;
+    color: white;
+}
+
+.service-card.card-pink {
+    background: linear-gradient(135deg, #f472b6 0%, #db2777 100%);
+    border-color: #db2777;
+    color: white;
+}
+
+.service-card.card-green {
+    background: linear-gradient(135deg, #4ade80 0%, #16a34a 100%);
+    border-color: #16a34a;
+    color: white;
+}
+
+.service-card.card-teal {
+    background: linear-gradient(135deg, #2dd4bf 0%, #0d9488 100%);
+    border-color: #0d9488;
+    color: white;
+}
+
+.service-card.card-orange {
+    background: linear-gradient(135deg, #fbbf24 0%, #ea580c 100%);
+    border-color: #ea580c;
+    color: white;
+}
+
+/* Ensure icons and price tags look good on VIBRANT colored backgrounds */
+.service-card[class*="card-"] .service-icon {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.service-card[class*="card-"] .service-price {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-weight: 600;
+}
+
+.service-card[class*="card-"] .service-features li {
+    color: rgba(255, 255, 255, 0.95);
+}
+
+/* Hover effects for colored cards */
+.service-card[class*="card-"]:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    filter: brightness(1.05);
+    /* Make slightly brighter on hover */
+}
+
 .service-card.featured .service-icon {
     background: rgba(255, 255, 255, 0.2);
 }
