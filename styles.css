@@ -11,9 +11,12 @@
     --bg-primary: #fefefe;
     --bg-secondary: #f8f5ff;
     --bg-card: #ffffff;
+    --bg-card-light-mode: #ffffff;
     --bg-dark: #1e1b4b;
 
     --text-primary: #1e1b4b;
+    --text-primary-light-mode: #1e1b4b;
+    /* Hardcoded dark text for white sections */
     --text-secondary: #6b7280;
     --text-light: #9ca3af;
 
@@ -32,6 +35,209 @@
 
     --transition: all 0.3s ease;
     --transition-fast: all 0.15s ease;
+}
+
+/* ===== Dark Mode Variables ===== */
+body.dark-mode {
+    --bg-primary: #1e1b4b;
+    /* Midnight Blue */
+    --bg-secondary: #0f0e2b;
+    /* Darker Midnight Blue */
+    --bg-card: #2a2760;
+    /* Lighter Midnight Blue for cards */
+    --bg-dark: #0f0e2b;
+
+    --text-primary: #ffffff;
+    --text-secondary: #cbd5e1;
+    /* Light Gray */
+    --text-light: #94a3b8;
+
+    --border-color: #4338ca;
+    /* Indigo 700 */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+/* Force dark text on white sections in Dark Mode */
+body.dark-mode .gallery,
+body.dark-mode .contact {
+    color: var(--text-primary-light-mode);
+}
+
+body.dark-mode .gallery p,
+body.dark-mode .contact p,
+body.dark-mode .contact-item p {
+    color: var(--text-secondary-light-mode);
+}
+
+body.dark-mode .service-card {
+    background: var(--bg-card);
+    border-color: var(--border-color);
+}
+
+body.dark-mode .contact h2,
+body.dark-mode .contact p {
+    color: var(--text-primary-light-mode);
+}
+
+/* Actually, simpler approach: prevent dark mode variables from affecting these specific sections. */
+/* But variables are inherited. */
+/* I will just override the specific text elements in these sections to be dark. */
+
+/* Fix for specific elements in dark mode */
+body.dark-mode .header {
+    background: rgba(30, 27, 75, 0.95);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .nav-toggle span {
+    background: var(--text-primary);
+}
+
+body.dark-mode .service-card:hover {
+    border-color: var(--primary);
+}
+
+body.dark-mode .hero-bg {
+    background-image: linear-gradient(90deg,
+            #1e1b4b 0%,
+            rgba(30, 27, 75, 0.95) 35%,
+            rgba(30, 27, 75, 0.5) 55%), url('assets/images/fondofinal.png');
+}
+
+body.dark-mode .hero-badge {
+    background: var(--bg-card);
+    color: var(--primary-light);
+}
+
+body.dark-mode .feature-icon,
+body.dark-mode .service-icon {
+    background: var(--bg-card);
+    color: var(--primary-light);
+}
+
+body.dark-mode .gallery-item {
+    border: 1px solid var(--border-color);
+}
+
+body.dark-mode .polaroid-card {
+    background: var(--bg-card);
+    color: var(--text-primary);
+}
+
+body.dark-mode .floating-card {
+    background: white;
+    color: var(--text-primary-light-mode);
+}
+
+body.dark-mode .floating-card p {
+    color: var(--text-primary-light-mode);
+}
+
+
+
+body.dark-mode .polaroid-caption h3 {
+    color: var(--text-primary);
+}
+
+body.dark-mode .happy-customers {
+    background: linear-gradient(180deg, #1e1b4b 0%, #2e1065 100%);
+}
+
+body.dark-mode .section-subtitle {
+    color: var(--text-secondary);
+}
+
+body.dark-mode .testimonial-card {
+    background: var(--bg-card);
+}
+
+body.dark-mode .contact-form-wrapper {
+    background: var(--bg-card);
+}
+
+body.dark-mode .contact-form input,
+body.dark-mode .contact-form select,
+body.dark-mode .contact-form textarea {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+body.dark-mode .chatbot-container {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+}
+
+body.dark-mode .chatbot-messages {
+    background: var(--bg-secondary);
+}
+
+body.dark-mode .message-content {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+body.dark-mode .chat-message.user .message-content {
+    background: var(--gradient);
+    border: none;
+}
+
+body.dark-mode .chatbot-input-container {
+    background: var(--bg-card);
+    border-top: 1px solid var(--border-color);
+}
+
+body.dark-mode .chatbot-input {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+body.dark-mode .quick-reply {
+    background: var(--bg-secondary);
+    border-color: var(--primary);
+}
+
+body.dark-mode .search-box input {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+/* ===== Theme Toggle Button ===== */
+.theme-toggle {
+    background: none;
+    border: 1px solid var(--border-color);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    transition: var(--transition);
+    margin-left: 10px;
+}
+
+.theme-toggle:hover {
+    background: var(--bg-secondary);
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+body.dark-mode .theme-toggle {
+    border-color: var(--primary-light);
+    color: var(--primary-light);
+}
+
+body.dark-mode .theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
 }
 
 /* ===== Reset & Base ===== */
@@ -475,7 +681,7 @@ img {
 /* ===== Services Section ===== */
 .services {
     padding: 100px 0;
-    background: white;
+    background: var(--bg-primary);
 }
 
 .services-grid {
@@ -652,6 +858,8 @@ img {
 .gallery {
     padding: 100px 0;
     background: white;
+    color: var(--text-primary-light-mode);
+    /* Force dark text */
 }
 
 .gallery-grid {
@@ -967,6 +1175,8 @@ img {
 .contact {
     padding: 100px 0;
     background: white;
+    color: var(--text-primary-light-mode);
+    /* Force dark text */
 }
 
 .contact-wrapper {
