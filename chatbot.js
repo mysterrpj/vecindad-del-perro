@@ -1,6 +1,6 @@
 // ===== CHATBOT UI PARA LA VECINDAD DEL PERRO =====
 
-const GEMINI_API_KEY = "AIzaSyCIRLdfQ5F7pJmJbAlBMwKpJTs6B0k-iOU";
+const GEMINI_API_KEY = CONFIG.GEMINI_API_KEY;
 
 let voiceClient = null;
 let isVoiceActive = false;
