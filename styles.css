@@ -61,14 +61,11 @@ body.dark-mode {
 }
 
 /* Force dark text on white sections in Dark Mode */
-body.dark-mode .gallery,
-body.dark-mode .contact {
+body.dark-mode .gallery {
     color: var(--text-primary-light-mode);
 }
 
-body.dark-mode .gallery p,
-body.dark-mode .contact p,
-body.dark-mode .contact-item p {
+body.dark-mode .gallery p {
     color: var(--text-secondary-light-mode);
 }
 
@@ -77,16 +74,27 @@ body.dark-mode .service-card {
     border-color: var(--border-color);
 }
 
-body.dark-mode .contact h2,
-body.dark-mode .contact p {
-    color: var(--text-primary-light-mode);
-}
+
 
 /* Actually, simpler approach: prevent dark mode variables from affecting these specific sections. */
 /* But variables are inherited. */
 /* I will just override the specific text elements in these sections to be dark. */
 
 /* Fix for specific elements in dark mode */
+body.dark-mode .contact {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+body.dark-mode .contact p,
+body.dark-mode .contact-item p {
+    color: var(--text-secondary);
+}
+
+body.dark-mode .contact h2 {
+    color: var(--text-primary);
+}
+
 body.dark-mode .header {
     background: rgba(30, 27, 75, 0.95);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
