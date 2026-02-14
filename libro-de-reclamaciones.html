@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Libro de Reclamaciones | La Vecindad del Perro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .claims-container {
+            padding: 120px 0 80px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .claims-card {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🐕</span>
+                <span class="logo-text">La Vecindad del Perro</span>
+            </a>
+        </nav>
+    </header>
+
+    <main class="container claims-container">
+        <a href="index.html" class="back-link">← Volver al inicio</a>
+        <div class="claims-card">
+            <h1>Libro de Reclamaciones</h1>
+            <p>Conforme a lo establecido en el Código de Protección y Defensa del Consumidor, nuestra institución cuenta
+                con un Libro de Reclamaciones a su disposición.</p>
+
+            <form id="claimsForm" class="contact-form" style="margin-top: 30px;">
+                <h3>1. Identificación del Consumidor</h3>
+                <div class="form-row">
+                    <div class="form-group"><input type="text" id="claimName" placeholder="Nombre completo" required>
+                    </div>
+                    <div class="form-group"><input type="text" id="claimDni" placeholder="DNI / CE" required></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><input type="email" id="claimEmail" placeholder="Correo electrónico"
+                            required></div>
+                    <div class="form-group"><input type="tel" id="claimPhone" placeholder="Teléfono" required></div>
+                </div>
+                <div class="form-group"><input type="text" id="claimAddress" placeholder="Domicilio" required></div>
+
+                <h3 style="margin-top: 30px;">2. Detalle de la Reclamación</h3>
+                <div class="form-group">
+                    <select id="claimType" required>
+                        <option value="Queja">Queja (Malestar respecto a la atención)</option>
+                        <option value="Reclamo">Reclamo (Disconformidad con el producto/servicio)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <textarea id="claimDetail" placeholder="Detalle de su reclamo o queja" required></textarea>
+                </div>
+                <div class="form-group">
+                    <textarea id="claimOrder" placeholder="Pedido del consumidor" required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Enviar Reclamación</button>
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-bottom">
+            <p>&copy; 2025 La Vecindad del Perro. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.getElementById('claimsForm')?.addEventListener('submit', function (e) {
+            e.preventDefault();
+            // Simulación de envío a Firebase (en un caso real usaríamos db.collection('claims').add(...))
+            console.log('Reclamación enviada');
+            showNotification('Su reclamación ha sido registrada. Le responderemos en un plazo máximo de 15 días hábiles.');
+            this.reset();
+        });
+    </script>
+</body>
+
+</html>

@@ -21,13 +21,13 @@ let lastScroll = 0;
 
 window.addEventListener('scroll', () => {
     const currentScroll = window.pageYOffset;
-    
+
     if (currentScroll > 100) {
         header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
     } else {
         header.style.boxShadow = 'var(--shadow-sm)';
     }
-    
+
     lastScroll = currentScroll;
 });
 
@@ -52,9 +52,9 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // Form submission
 const contactForm = document.getElementById('contactForm');
 
-contactForm.addEventListener('submit', function(e) {
+contactForm.addEventListener('submit', function (e) {
     e.preventDefault();
-    
+
     // Get form data
     const formData = {
         name: document.getElementById('name').value,
@@ -63,13 +63,13 @@ contactForm.addEventListener('submit', function(e) {
         service: document.getElementById('service').value,
         message: document.getElementById('message').value
     };
-    
+
     // Here you would normally send this to a server
     console.log('Form submitted:', formData);
-    
+
     // Show success message
     showNotification('¡Gracias! Tu reserva ha sido enviada. Te contactaremos pronto.');
-    
+
     // Reset form
     contactForm.reset();
 });
@@ -83,7 +83,7 @@ function showNotification(message) {
         <span class="notification-icon">✅</span>
         <span class="notification-text">${message}</span>
     `;
-    
+
     // Add styles
     notification.style.cssText = `
         position: fixed;
@@ -101,7 +101,7 @@ function showNotification(message) {
         animation: slideIn 0.5s ease;
         max-width: 400px;
     `;
-    
+
     // Add animation keyframes
     const styleSheet = document.createElement('style');
     styleSheet.textContent = `
@@ -127,10 +127,10 @@ function showNotification(message) {
         }
     `;
     document.head.appendChild(styleSheet);
-    
+
     // Add to DOM
     document.body.appendChild(notification);
-    
+
     // Remove after 5 seconds
     setTimeout(() => {
         notification.style.animation = 'slideOut 0.5s ease forwards';
@@ -177,7 +177,7 @@ document.head.appendChild(animateStyle);
 function animateCounter(element, target, duration = 2000) {
     let start = 0;
     const increment = target / (duration / 16);
-    
+
     function updateCounter() {
         start += increment;
         if (start < target) {
@@ -187,7 +187,7 @@ function animateCounter(element, target, duration = 2000) {
             element.textContent = target + (target === 4.9 ? '' : '+');
         }
     }
-    
+
     updateCounter();
 }
 
@@ -216,9 +216,166 @@ if (heroSection) {
 window.addEventListener('scroll', () => {
     const scrolled = window.pageYOffset;
     const cards = document.querySelectorAll('.floating-card');
-    
+
     cards.forEach((card, index) => {
         const speed = 0.05 * (index + 1);
         card.style.transform = `translateY(${scrolled * speed}px)`;
     });
 });
+
+// --- CULQI INTEGRATION & CART LOGIC ---
+
+// Configuration for Culqi (Test Key)
+const CULQI_PUBLIC_KEY = 'pk_test_ed8f4c7d0d0c4d7e'; // Standard test key for simulation
+
+let currentCart = {
+    service: "",
+    price: 0,
+    amount: 0
+};
+
+// UI Elements
+const cartOverlay = document.getElementById('cartOverlay');
+const closeCart = document.getElementById('closeCart');
+const cartItemsList = document.getElementById('cartItemsList');
+const cartTotalText = document.getElementById('cartTotalText');
+const btnCheckout = document.getElementById('btnCheckout');
+
+// Function to open cart
+function openCart(service, price) {
+    // Re-select elements to ensure they exist
+    const overlay = document.getElementById('cartOverlay');
+    const itemsList = document.getElementById('cartItemsList');
+    const totalText = document.getElementById('cartTotalText');
+
+    // Update global state
+    currentCart.service = service;
+    currentCart.price = price; // price in cents for Culqi
+    currentCart.amount = price / 100;
+
+    if (itemsList && totalText) {
+        itemsList.innerHTML = `
+            <div class="cart-item">
+                <span>${service}</span>
+                <span>S/ ${currentCart.amount.toFixed(2)}</span>
+            </div>
+        `;
+        totalText.textContent = `S/ ${currentCart.amount.toFixed(2)}`;
+    }
+
+    if (overlay) {
+        overlay.style.display = 'flex'; // Ensure flexbox is used
+        overlay.style.visibility = 'visible';
+        overlay.style.opacity = '1';
+        overlay.style.zIndex = '999999'; // Ensure it's on top
+        overlay.classList.add('active');
+    } else {
+        console.error('CRITICAL: Cart overlay element not found');
+        alert('Error: No se pudo abrir el carrito. Por favor recarga la página.');
+    }
+}
+
+// Event Listeners for "Pagar" buttons
+function attachPayListeners() {
+    const payButtons = document.querySelectorAll('.btn-pay');
+    console.log(`Attached listeners to ${payButtons.length} payment buttons`);
+    payButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const service = e.target.getAttribute('data-service');
+            const price = parseInt(e.target.getAttribute('data-price'));
+            openCart(service, price);
+        });
+    });
+}
+
+// Ensure elements exist before attaching listeners
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', attachPayListeners);
+} else {
+    attachPayListeners();
+}
+
+// Close modal
+closeCart?.addEventListener('click', () => {
+    cartOverlay.classList.remove('active');
+    // Reset styles
+    cartOverlay.style.visibility = '';
+    cartOverlay.style.opacity = '';
+});
+
+cartOverlay?.addEventListener('click', (e) => {
+    if (e.target === cartOverlay) {
+        cartOverlay.classList.remove('active');
+        cartOverlay.style.visibility = '';
+        cartOverlay.style.opacity = '';
+    }
+});
+
+// Initialize Culqi
+function initCulqi() {
+    if (window.Culqi) {
+        console.log('Culqi SDK loaded');
+        Culqi.publicKey = CULQI_PUBLIC_KEY;
+        Culqi.settings({
+            title: 'La Vecindad del Perro',
+            currency: 'PEN',
+            description: 'Servicios de Spa para Mascotas',
+            amount: 0 // Will be updated on checkout
+        });
+
+        Culqi.options({
+            lang: 'auto',
+            modal: true,
+            installments: false,
+            customButton: 'Pagar ahora'
+        });
+    } else {
+        console.error('Culqi SDK not loaded yet. Retrying...');
+        setTimeout(initCulqi, 500);
+    }
+}
+
+// Start watching for Culqi
+initCulqi();
+
+// Checkout Button logic
+btnCheckout?.addEventListener('click', () => {
+    if (!window.Culqi) {
+        showNotification('Error: La pasarela de pagos no está lista. Recarga la página.');
+        return;
+    }
+
+    // Update settings with current amount
+    Culqi.settings({
+        title: 'La Vecindad del Perro',
+        currency: 'PEN',
+        description: currentCart.service || 'Servicio de Spa',
+        amount: currentCart.price
+    });
+
+    Culqi.open();
+});
+
+// Handle Culqi Token (Response)
+function culqi() {
+    if (Culqi.token) {
+        const token = Culqi.token.id;
+        console.log('Token Culqi recibido:', token);
+
+        // simulation of payment processing
+        showNotification('¡Pago procesado con éxito! Token: ' + token);
+        cartOverlay.classList.remove('active');
+        cartOverlay.style.visibility = '';
+        cartOverlay.style.opacity = '';
+
+        // In a real app, send the token to your backend here
+    } else {
+        console.log(Culqi.error);
+        showNotification('Error: ' + Culqi.error.user_message);
+    }
+}
+
+// Ensure Culqi response function is global
+window.culqi = culqi;
