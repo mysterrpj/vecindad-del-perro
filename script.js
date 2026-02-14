@@ -226,7 +226,7 @@ window.addEventListener('scroll', () => {
 // --- CULQI INTEGRATION & CART LOGIC ---
 
 // Configuration for Culqi (Test Key)
-const CULQI_PUBLIC_KEY = 'pk_test_bxGG2MOE6tdVoo65'; // User's Test Key
+const CULQI_PUBLIC_KEY = CONFIG.CULQI_PUBLIC_KEY || 'pk_test_ed8f4c7d0d0c4d7e'; // Fallback to generic test key if config missing
 
 let currentCart = {
     service: "",
