@@ -226,7 +226,7 @@ window.addEventListener('scroll', () => {
 // --- CULQI INTEGRATION & CART LOGIC ---
 
 // Configuration for Culqi (Test Key)
-const CULQI_PUBLIC_KEY = 'pk_test_ed8f4c7d0d0c4d7e'; // Standard test key for simulation
+const CULQI_PUBLIC_KEY = 'pk_test_bxGG2MOE6tdVoo65'; // User's Test Key
 
 let currentCart = {
     service: "",
@@ -359,21 +359,34 @@ btnCheckout?.addEventListener('click', () => {
 });
 
 // Handle Culqi Token (Response)
+// Handle Culqi Token (Response)
 function culqi() {
     if (Culqi.token) {
         const token = Culqi.token.id;
-        console.log('Token Culqi recibido:', token);
+        // console.log('Token Culqi recibido:', token); 
 
-        // simulation of payment processing
-        showNotification('¡Pago procesado con éxito! Token: ' + token);
-        cartOverlay.classList.remove('active');
-        cartOverlay.style.visibility = '';
-        cartOverlay.style.opacity = '';
+        // 1. Force close the cart modal
+        if (cartOverlay) {
+            cartOverlay.classList.remove('active');
+            cartOverlay.style.display = 'none'; // Force hide immediately
+            cartOverlay.style.visibility = '';
+            cartOverlay.style.opacity = '';
+            cartOverlay.style.zIndex = '';
+        }
+
+        // 2. Show success message
+        showNotification('¡Pago exitoso! 🐶 Gracias por tu compra.');
+
+        // 3. Reset cart (optional cleanliness)
+        currentCart = { service: "", price: 0, amount: 0 };
 
         // In a real app, send the token to your backend here
     } else {
-        console.log(Culqi.error);
-        showNotification('Error: ' + Culqi.error.user_message);
+        // Error handling
+        if (Culqi.error) {
+            console.log(Culqi.error);
+            showNotification('Error: ' + Culqi.error.user_message);
+        }
     }
 }
 
