@@ -529,7 +529,7 @@ img {
     image-rendering: high-quality;
     /* Estándar moderno */
     /* Totalmente nítida */
-    animation: zoomEffect 25s infinite alternate ease-in-out;
+    animation: zoomEffect 18s infinite alternate ease-in-out;
     pointer-events: none;
     will-change: transform;
 }
@@ -540,7 +540,7 @@ img {
     }
 
     100% {
-        transform: scale(1.08);
+        transform: scale(1.12);
     }
 
     /* Zoom un poco más notorio (8%) pero suave */
@@ -1572,6 +1572,10 @@ img {
 }
 
 @media (max-width: 768px) {
+    .theme-toggle {
+        display: none;
+    }
+
     .nav-menu {
         display: none;
         position: absolute;
@@ -1619,7 +1623,7 @@ img {
         background-size: auto, auto, 100% auto;
         background-position: center, center, 56% bottom;
         background-repeat: no-repeat;
-        animation: zoomEffect 22s infinite alternate ease-in-out;
+        animation: zoomEffect 18s infinite alternate ease-in-out;
     }
 
     body:not(.dark-mode) .hero-bg {
@@ -1719,9 +1723,9 @@ img {
                 rgba(30, 27, 75, 0) 100%),
             url('assets/images/fondofinal.png');
         background-size: cover;
-        background-position: 72% center;
+        background-position: 68% center;
         background-repeat: no-repeat;
-        animation: zoomEffect 25s infinite alternate ease-in-out;
+        animation: zoomEffect 18s infinite alternate ease-in-out;
     }
 
     body.dark-mode .hero-text {
@@ -1843,7 +1847,7 @@ img {
 
     body.dark-mode .hero-bg {
         background-size: cover;
-        background-position: 74% center;
+        background-position: 70% center;
     }
 
     .contact-form-wrapper {

@@ -3,8 +3,22 @@
     "public": ".",
     "ignore": [
       "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
+      ".firebaserc",
+      ".gitignore",
+      "firebase-debug.log",
+      "*.md",
+      "*.pdf",
+      ".git",
+      ".git/**",
+      ".firebase",
+      ".firebase/**",
+      ".agent",
+      ".agent/**",
+      "**/node_modules/**",
+      "**/.git/**",
+      "**/.firebase/**",
+      "**/.agent/**",
+      "**/.*"
     ]
   }
 }
