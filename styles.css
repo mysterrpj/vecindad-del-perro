@@ -113,6 +113,8 @@ body.dark-mode .hero-bg {
             #1e1b4b 0%,
             rgba(30, 27, 75, 0.95) 35%,
             rgba(30, 27, 75, 0.5) 55%), url('assets/images/fondofinal.png');
+    background-size: cover;
+    background-position: center right;
 }
 
 body.dark-mode .hero-badge {
@@ -592,6 +594,14 @@ img {
     margin-left: 0;
     /* Sin margen auto */
     margin-right: 0;
+}
+
+.hero-copy-mobile {
+    display: none;
+}
+
+.hero-text > p:not(.hero-description) {
+    display: none;
 }
 
 .hero-buttons {
@@ -1482,9 +1492,20 @@ img {
 
 /* ===== Responsive Design ===== */
 @media (max-width: 1024px) {
+    .hero {
+        min-height: auto;
+        padding-top: 120px;
+        padding-bottom: 120px;
+    }
+
     .hero-content {
-        grid-template-columns: 1fr;
+        align-items: center;
         text-align: center;
+    }
+
+    .hero-text {
+        width: 100%;
+        max-width: 680px;
     }
 
     .hero-text p {
@@ -1576,8 +1597,140 @@ img {
         display: flex;
     }
 
+    .hero {
+        min-height: auto;
+        padding-top: 110px;
+        padding-bottom: 90px;
+    }
+
+    .hero-bg {
+        background-image:
+            linear-gradient(180deg,
+                rgba(248, 245, 255, 0.9) 0%,
+                rgba(248, 245, 255, 0.7) 28%,
+                rgba(248, 245, 255, 0.32) 56%,
+                rgba(248, 245, 255, 0.18) 100%),
+            linear-gradient(90deg,
+                rgba(30, 27, 75, 0.8) 0%,
+                rgba(30, 27, 75, 0.68) 30%,
+                rgba(30, 27, 75, 0.26) 54%,
+                rgba(30, 27, 75, 0.02) 72%),
+            url('assets/images/fondofinal.png');
+        background-size: auto, auto, 100% auto;
+        background-position: center, center, 56% bottom;
+        background-repeat: no-repeat;
+        animation: zoomEffect 22s infinite alternate ease-in-out;
+    }
+
+    body:not(.dark-mode) .hero-bg {
+        background-image:
+            linear-gradient(180deg,
+                rgba(255, 255, 255, 0.52) 0%,
+                rgba(255, 255, 255, 0.18) 18%,
+                rgba(255, 255, 255, 0.05) 38%,
+                rgba(255, 255, 255, 0.02) 100%),
+            linear-gradient(90deg,
+                rgba(255, 255, 255, 0.08) 0%,
+                rgba(255, 255, 255, 0.05) 16%,
+                rgba(30, 27, 75, 0.16) 40%,
+                rgba(30, 27, 75, 0.04) 68%,
+                rgba(30, 27, 75, 0) 100%),
+            url('assets/images/fondofinal.png');
+        background-size: auto, auto, 112% auto;
+        background-position: center, center, 54% 70%;
+    }
+
+    .hero-content {
+        padding: 0 24px;
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .hero-text {
+        width: min(52vw, 270px);
+        max-width: 270px;
+    }
+
     .hero-text h1 {
         font-size: 2.5rem;
+        line-height: 1.15;
+        margin-bottom: 20px;
+    }
+
+    .hero-text p {
+        font-size: 1rem;
+        line-height: 1.55;
+        max-width: 100%;
+        margin-bottom: 24px;
+    }
+
+    body:not(.dark-mode) .hero-text p,
+    body:not(.dark-mode) .hero-description {
+        color: rgba(30, 27, 75, 0.72);
+    }
+
+    .hero-buttons {
+        width: min(52vw, 270px);
+        flex-wrap: nowrap;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 36px;
+    }
+
+    .hero-buttons .btn {
+        width: 100%;
+    }
+
+    .hero-buttons .btn-outline {
+        background: rgba(255, 255, 255, 0.82);
+        color: var(--primary-dark);
+        border-color: rgba(124, 58, 237, 0.45);
+        box-shadow: 0 10px 24px rgba(30, 27, 75, 0.1);
+    }
+
+    body:not(.dark-mode) .hero-buttons .btn-outline {
+        background: rgba(255, 255, 255, 0.92);
+        border-color: rgba(124, 58, 237, 0.3);
+        box-shadow: 0 12px 24px rgba(124, 58, 237, 0.08);
+    }
+
+    .hero-stats {
+        width: min(56vw, 285px);
+        gap: 14px;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        margin-bottom: 0;
+    }
+
+    body:not(.dark-mode) .hero-stats .stat-number {
+        color: #7c3aed;
+    }
+
+    .stat {
+        min-width: 0;
+    }
+
+    body.dark-mode .hero-bg {
+        background-image:
+            linear-gradient(90deg,
+                #1e1b4b 0%,
+                rgba(30, 27, 75, 0.95) 35%,
+                rgba(30, 27, 75, 0.5) 55%,
+                rgba(30, 27, 75, 0) 100%),
+            url('assets/images/fondofinal.png');
+        background-size: cover;
+        background-position: 72% center;
+        background-repeat: no-repeat;
+        animation: zoomEffect 25s infinite alternate ease-in-out;
+    }
+
+    body.dark-mode .hero-text {
+        width: min(54vw, 286px);
+        max-width: 286px;
+    }
+
+    body.dark-mode .hero-buttons {
+        width: min(54vw, 286px);
     }
 
     .section-header h2 {
@@ -1607,17 +1760,90 @@ img {
 }
 
 @media (max-width: 480px) {
-    .hero-text h1 {
-        font-size: 2rem;
+    .hero {
+        padding-top: 104px;
+        padding-bottom: 72px;
     }
 
+    .hero-content {
+        padding: 0 18px;
+    }
+
+    .hero-badge {
+        padding: 10px 14px;
+        font-size: 0.95rem;
+        margin-bottom: 20px;
+    }
+
+    .hero-text p {
+        font-size: 0.98rem;
+        margin-bottom: 20px;
+    }
+
+    .hero-text h1 {
+        font-size: 2.1rem;
+    }
+
+    .hero-copy-desktop {
+        display: none;
+    }
+
+    .hero-copy-mobile {
+        display: inline;
+    }
+
+    .hero-text,
     .hero-buttons {
-        flex-direction: column;
+        width: min(52vw, 222px);
+        max-width: 222px;
+    }
+
+    body:not(.dark-mode) .hero-bg {
+        background-size: auto, auto, 118% auto;
+        background-position: center, center, 56% 72%;
+    }
+
+    .hero-description {
+        position: relative;
+    }
+
+    .hero-description::before {
+        content: "Ba\00f1o, grooming y cuidados especiales para que tu mascota luzca incre\00edble.";
+        display: block;
+    }
+
+    .hero-copy-desktop,
+    .hero-copy-mobile {
+        display: none;
     }
 
     .hero-stats {
-        flex-direction: column;
-        gap: 20px;
+        width: min(55vw, 222px);
+        gap: 8px;
+    }
+
+    .stat-number {
+        font-size: 1.5rem;
+    }
+
+    .stat-label {
+        display: none;
+    }
+
+    body:not(.dark-mode) .hero-badge {
+        background: rgba(255, 255, 255, 0.92);
+        box-shadow: 0 12px 26px rgba(30, 27, 75, 0.1);
+    }
+
+    body.dark-mode .hero-text,
+    body.dark-mode .hero-buttons {
+        width: min(56vw, 234px);
+        max-width: 234px;
+    }
+
+    body.dark-mode .hero-bg {
+        background-size: cover;
+        background-position: 74% center;
     }
 
     .contact-form-wrapper {
@@ -1895,6 +2121,87 @@ img {
 
 .chatbot-toggle.active .toggle-close {
     display: inline;
+}
+
+@media (max-width: 768px) {
+    .chatbot-container {
+        left: 12px;
+        right: 12px;
+        bottom: 84px;
+        width: auto;
+        max-width: none;
+        height: min(68vh, 560px);
+        max-height: calc(100dvh - 110px);
+        border-radius: 24px;
+    }
+
+    .chatbot-messages {
+        padding: 16px;
+    }
+
+    .chat-message {
+        max-width: 92%;
+    }
+
+    .message-content {
+        font-size: 0.9rem;
+    }
+
+    .chatbot-input-container {
+        padding: 12px;
+        gap: 8px;
+    }
+
+    .chatbot-input {
+        min-width: 0;
+        padding: 12px 14px;
+    }
+
+    .chatbot-mic,
+    .chatbot-send {
+        width: 44px;
+        height: 44px;
+        flex-shrink: 0;
+    }
+
+    .chatbot-toggle {
+        right: 16px;
+        bottom: 16px;
+        width: 58px;
+        height: 58px;
+    }
+}
+
+@media (max-width: 480px) {
+    .chatbot-container {
+        left: 8px;
+        right: 8px;
+        bottom: 78px;
+        height: min(72vh, 540px);
+        max-height: calc(100dvh - 96px);
+        border-radius: 20px;
+    }
+
+    .chatbot-header {
+        padding: 14px 16px;
+    }
+
+    .chatbot-title {
+        gap: 10px;
+    }
+
+    .chatbot-avatar {
+        font-size: 1.6rem;
+    }
+
+    .chatbot-title strong {
+        font-size: 0.95rem;
+    }
+
+    .quick-reply {
+        padding: 7px 12px;
+        font-size: 0.78rem;
+    }
 }
 
 /* Speaker button */

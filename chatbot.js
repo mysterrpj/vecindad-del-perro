@@ -136,7 +136,8 @@ function initEventListeners() {
 
     // Auto-abrir después de 5 segundos
     setTimeout(() => {
-        if (!sessionStorage.getItem('chatOpened') && chatbot) {
+        const isMobileViewport = window.matchMedia('(max-width: 768px)').matches;
+        if (!sessionStorage.getItem('chatOpened') && chatbot && !isMobileViewport) {
             chatbot.classList.add('active');
             toggle?.classList.add('active');
             sessionStorage.setItem('chatOpened', 'true');
