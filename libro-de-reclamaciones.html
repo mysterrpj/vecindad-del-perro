@@ -102,12 +102,23 @@
         </div>
     </footer>
 
+    <script src="config.js"></script>
+    <script src="data-store.js"></script>
     <script src="script.js"></script>
     <script>
         document.getElementById('claimsForm')?.addEventListener('submit', function (e) {
             e.preventDefault();
             // Simulación de envío a Firebase (en un caso real usaríamos db.collection('claims').add(...))
-            console.log('Reclamación enviada');
+            window.BusinessStore?.createClaim({
+                name: document.getElementById('claimName').value,
+                dni: document.getElementById('claimDni').value,
+                email: document.getElementById('claimEmail').value,
+                phone: document.getElementById('claimPhone').value,
+                address: document.getElementById('claimAddress').value,
+                type: document.getElementById('claimType').value,
+                detail: document.getElementById('claimDetail').value,
+                order: document.getElementById('claimOrder').value
+            });
             showNotification('Su reclamación ha sido registrada. Le responderemos en un plazo máximo de 15 días hábiles.');
             this.reset();
         });

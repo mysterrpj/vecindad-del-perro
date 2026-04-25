@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Dashboard | La Vecindad del Perro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="auth-page" data-page="login">
+    <form class="auth-card" id="loginForm">
+        <p class="eyebrow">Dashboard administrativo</p>
+        <h1>La Vecindad del Perro</h1>
+        <p>Ingresa para revisar reservas, pagos y reclamos.</p>
+        <input class="input" id="email" type="email" placeholder="Correo admin" autocomplete="username">
+        <input class="input" id="password" type="password" placeholder="Contraseña" autocomplete="current-password">
+        <input class="input" id="pin" type="password" placeholder="PIN temporal fallback" autocomplete="current-password">
+        <p id="loginError" class="muted" style="color:#fca5a5; min-height: 18px;"></p>
+        <button class="btn primary" type="submit" style="width:100%;">Entrar</button>
+        <p class="muted" id="loginHelp">Usa tu usuario de Firebase Auth. PIN temporal: 1234.</p>
+    </form>
+    <script src="../config.js?v=20260424-auth2"></script>
+    <script src="../data-store.js?v=20260424-auth2"></script>
+    <script src="app.js?v=20260424-auth2"></script>
+</body>
+</html>

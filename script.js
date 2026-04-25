@@ -2,16 +2,16 @@
 const navToggle = document.getElementById('navToggle');
 const navMenu = document.querySelector('.nav-menu');
 
-navToggle.addEventListener('click', () => {
-    navMenu.classList.toggle('active');
+navToggle?.addEventListener('click', () => {
+    navMenu?.classList.toggle('active');
     navToggle.classList.toggle('active');
 });
 
 // Close mobile menu when clicking on a link
 document.querySelectorAll('.nav-menu a').forEach(link => {
     link.addEventListener('click', () => {
-        navMenu.classList.remove('active');
-        navToggle.classList.remove('active');
+        navMenu?.classList.remove('active');
+        navToggle?.classList.remove('active');
     });
 });
 
@@ -23,9 +23,9 @@ window.addEventListener('scroll', () => {
     const currentScroll = window.pageYOffset;
 
     if (currentScroll > 100) {
-        header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+        if (header) header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
     } else {
-        header.style.boxShadow = 'var(--shadow-sm)';
+        if (header) header.style.boxShadow = 'var(--shadow-sm)';
     }
 
     lastScroll = currentScroll;
@@ -52,26 +52,37 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // Form submission
 const contactForm = document.getElementById('contactForm');
 
-contactForm.addEventListener('submit', function (e) {
+contactForm?.addEventListener('submit', function (e) {
     e.preventDefault();
 
-    // Get form data
+    const serviceSelect = document.getElementById('service');
+    const serviceLabel = serviceSelect?.selectedOptions?.[0]?.textContent || serviceSelect?.value || '';
+
     const formData = {
         name: document.getElementById('name').value,
         phone: document.getElementById('phone').value,
         petName: document.getElementById('petName').value,
-        service: document.getElementById('service').value,
-        message: document.getElementById('message').value
+        service: serviceLabel,
+        message: document.getElementById('message').value,
+        source: 'Formulario web'
     };
 
-    // Here you would normally send this to a server
-    console.log('Form submitted:', formData);
+    window.BusinessStore?.createReservation(formData);
 
-    // Show success message
-    showNotification('¡Gracias! Tu reserva ha sido enviada. Te contactaremos pronto.');
+    const whatsappNumber = window.CONFIG?.WHATSAPP_NUMBER || '51970716064';
+    const whatsappText = [
+        'Hola, quiero reservar una cita para mi mascota.',
+        `Nombre: ${formData.name}`,
+        `Telefono: ${formData.phone}`,
+        `Mascota: ${formData.petName}`,
+        `Servicio: ${formData.service}`,
+        formData.message ? `Mensaje: ${formData.message}` : ''
+    ].filter(Boolean).join('\n');
 
-    // Reset form
+    showNotification('Reserva registrada. Te abriremos WhatsApp para coordinar la hora.');
+
     contactForm.reset();
+    window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappText)}`, '_blank');
 });
 
 // Notification function
@@ -226,7 +237,7 @@ window.addEventListener('scroll', () => {
 // --- CULQI INTEGRATION & CART LOGIC ---
 
 // Configuration for Culqi (Test Key)
-const CULQI_PUBLIC_KEY = CONFIG.CULQI_PUBLIC_KEY || 'pk_test_ed8f4c7d0d0c4d7e'; // Fallback to generic test key if config missing
+const CULQI_PUBLIC_KEY = window.CONFIG?.CULQI_PUBLIC_KEY || 'pk_test_ed8f4c7d0d0c4d7e'; // Fallback to generic test key if config missing
 
 let currentCart = {
     service: "",
@@ -278,7 +289,6 @@ function openCart(service, price) {
 // Event Listeners for "Pagar" buttons
 function attachPayListeners() {
     const payButtons = document.querySelectorAll('.btn-pay');
-    console.log(`Attached listeners to ${payButtons.length} payment buttons`);
     payButtons.forEach(button => {
         button.addEventListener('click', (e) => {
             e.preventDefault();
@@ -316,7 +326,6 @@ cartOverlay?.addEventListener('click', (e) => {
 // Initialize Culqi
 function initCulqi() {
     if (window.Culqi) {
-        console.log('Culqi SDK loaded');
         Culqi.publicKey = CULQI_PUBLIC_KEY;
         Culqi.settings({
             title: 'La Vecindad del Perro',
@@ -332,13 +341,14 @@ function initCulqi() {
             customButton: 'Pagar ahora'
         });
     } else {
-        console.error('Culqi SDK not loaded yet. Retrying...');
         setTimeout(initCulqi, 500);
     }
 }
 
-// Start watching for Culqi
-initCulqi();
+// Start watching for Culqi only on pages with checkout UI.
+if (document.querySelector('.btn-pay') || btnCheckout) {
+    initCulqi();
+}
 
 // Checkout Button logic
 btnCheckout?.addEventListener('click', () => {
@@ -363,7 +373,13 @@ btnCheckout?.addEventListener('click', () => {
 function culqi() {
     if (Culqi.token) {
         const token = Culqi.token.id;
-        // console.log('Token Culqi recibido:', token); 
+        window.BusinessStore?.createPayment({
+            service: currentCart.service,
+            amount: currentCart.amount,
+            method: 'Culqi',
+            status: 'Token recibido - falta cargo backend',
+            token
+        });
 
         // 1. Force close the cart modal
         if (cartOverlay) {
@@ -374,13 +390,12 @@ function culqi() {
             cartOverlay.style.zIndex = '';
         }
 
-        // 2. Show success message
-        showNotification('¡Pago exitoso! 🐶 Gracias por tu compra.');
+        // 2. Show status message
+        showNotification('Datos de pago recibidos. Falta activar el backend Culqi para cobrar en producción.');
 
         // 3. Reset cart (optional cleanliness)
         currentCart = { service: "", price: 0, amount: 0 };
 
-        // In a real app, send the token to your backend here
     } else {
         // Error handling
         if (Culqi.error) {

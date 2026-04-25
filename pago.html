@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagar reserva | La Vecindad del Perro</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f8f5ff 0%, #ffffff 55%, #fff7ed 100%);
+        }
+
+        .payment-page {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 32px 16px;
+        }
+
+        .payment-shell {
+            width: min(100%, 520px);
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: var(--shadow-xl);
+            padding: 28px;
+        }
+
+        .payment-title {
+            margin-bottom: 8px;
+            color: var(--text-primary-light-mode);
+        }
+
+        .payment-muted {
+            color: var(--text-secondary);
+            margin-bottom: 22px;
+        }
+
+        .payment-summary {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 18px;
+            background: #fafafa;
+        }
+
+        .payment-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 8px 0;
+            color: var(--text-primary-light-mode);
+        }
+
+        .payment-row strong {
+            text-align: right;
+        }
+
+        .payment-total {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .payment-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            margin-bottom: 14px;
+            font: inherit;
+        }
+
+        .payment-status {
+            min-height: 24px;
+            color: var(--text-secondary);
+            margin-top: 14px;
+        }
+
+        .payment-status.error {
+            color: #b91c1c;
+        }
+
+        .payment-status.ok {
+            color: #15803d;
+        }
+    </style>
+</head>
+<body>
+    <main class="payment-page">
+        <section class="payment-shell">
+            <h1 class="payment-title">Pagar reserva</h1>
+            <p class="payment-muted">Completa el pago de tu cita de forma segura con Culqi.</p>
+
+            <div class="payment-summary" id="summary">
+                <div class="payment-row"><span>Reserva</span><strong id="reservationId">Cargando...</strong></div>
+                <div class="payment-row"><span>Cliente</span><strong id="customerName">-</strong></div>
+                <div class="payment-row"><span>Mascota</span><strong id="petName">-</strong></div>
+                <div class="payment-row"><span>Servicio</span><strong id="serviceName">-</strong></div>
+                <div class="payment-row"><span>Total</span><strong class="payment-total" id="amount">S/ 0.00</strong></div>
+            </div>
+
+            <input class="payment-input" id="email" type="email" placeholder="Correo para comprobante" autocomplete="email">
+            <button class="btn btn-primary btn-block" id="payButton" type="button" disabled>Pagar con Culqi</button>
+            <p class="payment-status" id="status">Preparando pago...</p>
+        </section>
+    </main>
+
+    <script src="https://checkout.culqi.com/js/v4"></script>
+    <script src="config.js"></script>
+    <script>
+        const API_URL = 'https://us-central1-vecindad-del-perro.cloudfunctions.net/paymentApi';
+        const params = new URLSearchParams(location.search);
+        const reservationId = params.get('r') || '';
+        const state = { reservation: null };
+        let backendReady = false;
+
+        const ids = {
+            reservationId: document.getElementById('reservationId'),
+            customerName: document.getElementById('customerName'),
+            petName: document.getElementById('petName'),
+            serviceName: document.getElementById('serviceName'),
+            amount: document.getElementById('amount'),
+            email: document.getElementById('email'),
+            payButton: document.getElementById('payButton'),
+            status: document.getElementById('status')
+        };
+
+        function setStatus(message, kind = '') {
+            ids.status.textContent = message;
+            ids.status.className = `payment-status ${kind}`;
+        }
+
+        function money(value) {
+            return Number(value || 0).toLocaleString('es-PE', { style: 'currency', currency: 'PEN' });
+        }
+
+        async function loadReservation() {
+            if (!reservationId) {
+                setStatus('No se encontro el codigo de reserva.', 'error');
+                return;
+            }
+
+            const response = await fetch(`${API_URL}?reservationId=${encodeURIComponent(reservationId)}`);
+            const data = await response.json();
+            if (!response.ok || !data.ok) {
+                setStatus(data.error || 'No se pudo cargar la reserva.', 'error');
+                return;
+            }
+
+            state.reservation = data.reservation;
+            backendReady = Boolean(data.backendReady);
+            ids.reservationId.textContent = state.reservation.id;
+            ids.customerName.textContent = state.reservation.name;
+            ids.petName.textContent = state.reservation.petName || '-';
+            ids.serviceName.textContent = state.reservation.service;
+            ids.amount.textContent = money(state.reservation.amount);
+
+            if (/pagad/i.test(state.reservation.status)) {
+                setStatus('Esta reserva ya figura como pagada.', 'ok');
+                return;
+            }
+
+            if (state.reservation.paymentHoldExpired) {
+                setStatus('El tiempo para pagar esta reserva vencio. El horario fue liberado; solicita una nueva reserva.', 'error');
+                return;
+            }
+
+            if (!backendReady) {
+                setStatus('El pago Culqi esta listo, pero falta activar la llave secreta del negocio.', 'error');
+                return;
+            }
+
+            ids.payButton.disabled = false;
+            const hold = state.reservation.paymentHoldExpiresAt
+                ? ` Tienes hasta ${new Date(state.reservation.paymentHoldExpiresAt).toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' })} para mantener el horario.`
+                : '';
+            setStatus(`Puedes pagar con tarjeta, Yape o billetera movil segun tu cuenta Culqi.${hold}`);
+        }
+
+        function configureCulqi() {
+            if (!window.Culqi) {
+                setTimeout(configureCulqi, 300);
+                return;
+            }
+
+            Culqi.publicKey = window.CONFIG?.CULQI_PUBLIC_KEY || '';
+            Culqi.options({
+                lang: 'auto',
+                modal: true,
+                installments: false,
+                customButton: 'Pagar ahora'
+            });
+        }
+
+        ids.payButton.addEventListener('click', () => {
+            if (!state.reservation) return;
+            if (!ids.email.value || !ids.email.checkValidity()) {
+                setStatus('Ingresa un correo valido para continuar.', 'error');
+                ids.email.focus();
+                return;
+            }
+
+            Culqi.settings({
+                title: 'La Vecindad del Perro',
+                currency: 'PEN',
+                description: state.reservation.service,
+                amount: state.reservation.amountCents
+            });
+            Culqi.open();
+        });
+
+        async function culqi() {
+            if (Culqi.error) {
+                setStatus(Culqi.error.user_message || 'No se pudo generar el pago.', 'error');
+                return;
+            }
+
+            if (!Culqi.token) return;
+
+            ids.payButton.disabled = true;
+            setStatus('Procesando pago...');
+
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    reservationId,
+                    sourceId: Culqi.token.id,
+                    email: ids.email.value
+                })
+            });
+            const data = await response.json();
+
+            if (!response.ok || !data.ok) {
+                ids.payButton.disabled = false;
+                setStatus(data.error || 'No se pudo procesar el pago.', 'error');
+                return;
+            }
+
+            setStatus('Pago registrado correctamente. Tu reserva quedo confirmada.', 'ok');
+        }
+
+        window.culqi = culqi;
+        configureCulqi();
+        loadReservation().catch(() => setStatus('No se pudo cargar la reserva.', 'error'));
+    </script>
+</body>
+</html>

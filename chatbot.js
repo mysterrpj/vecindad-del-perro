@@ -1,6 +1,6 @@
 // ===== CHATBOT UI PARA LA VECINDAD DEL PERRO =====
 
-const GEMINI_API_KEY = CONFIG.GEMINI_API_KEY;
+const GEMINI_API_KEY = window.CONFIG?.GEMINI_API_KEY || '';
 
 let voiceClient = null;
 let isVoiceActive = false;
@@ -14,6 +14,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ===== CONTROL DE VOZ =====
 async function startVoiceChat() {
+    if (!GEMINI_API_KEY) {
+        showStatus('La voz avanzada esta pendiente de API key. El chat de texto sigue disponible.');
+        setTimeout(hideStatus, 3500);
+        return;
+    }
+
     if (voiceClient && isVoiceActive) {
         stopVoiceChat();
         return;
