@@ -221,35 +221,68 @@ body.dark-mode .search-box input {
 /* ===== Theme Toggle Button ===== */
 .theme-toggle {
     position: relative;
-    /* For tooltip */
-    background: none;
-    border: 1px solid var(--border-color);
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-size: 1.2rem;
-    color: var(--text-primary);
-    transition: var(--transition);
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(39, 54, 49, 0.18);
+    color: #2f3b37;
     margin-left: 10px;
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color 0.35s ease, border-color 0.35s ease, color 0.35s ease;
+}
+
+.theme-toggle .theme-icon-light,
+.theme-toggle .theme-icon-dark {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+body:not(.dark-mode) .theme-toggle .theme-icon-dark {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+}
+
+body:not(.dark-mode) .theme-toggle .theme-icon-light {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.5);
+}
+
+body.dark-mode .theme-toggle .theme-icon-dark {
+    opacity: 0;
+    transform: rotate(90deg) scale(0.5);
+}
+
+body.dark-mode .theme-toggle .theme-icon-light {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
 }
 
 .theme-toggle:hover {
-    background: var(--bg-secondary);
-    border-color: var(--primary);
-    color: var(--primary);
+    background: rgba(255, 255, 255, 0.82);
+    border-color: rgba(39, 54, 49, 0.4);
+    color: #1b2722;
 }
 
 body.dark-mode .theme-toggle {
-    border-color: var(--primary-light);
-    color: var(--primary-light);
+    background: rgba(13, 18, 16, 0.45);
+    border-color: rgba(232, 238, 234, 0.2);
+    color: #dfe6e1;
 }
 
 body.dark-mode .theme-toggle:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(25, 33, 30, 0.72);
+    border-color: rgba(232, 238, 234, 0.42);
+    color: #f5f2ec;
 }
 
 /* Tooltip for Theme Toggle */
@@ -2301,4 +2334,427 @@ img {
 .image-placeholder span,
 .gallery-placeholder span {
     display: none;
+}
+
+
+/* ===== Editorial Hero Refresh ===== */
+.hero {
+    min-height: 90svh;
+    height: 90svh;
+    padding: 80px 0 0;
+    background: #f3ede5;
+    isolation: isolate;
+}
+
+.hero-bg,
+body.dark-mode .hero-bg {
+    background-image: url('assets/images/ChatGPT Image 2 sept 2026, 21_59_04.png');
+    background-color: #f3ede5;
+    background-size: cover;
+    background-position: 72% center;
+    background-repeat: no-repeat;
+    animation: none;
+}
+
+.hero-content {
+    position: relative;
+    min-height: calc(90svh - 80px);
+    height: calc(90svh - 80px);
+    max-width: 1240px;
+    padding: 0 32px;
+    align-items: flex-start;
+    justify-content: center;
+    text-align: left;
+}
+
+.hero-text {
+    width: min(45%, 540px);
+    max-width: 540px;
+    padding-top: clamp(72px, 12vh, 142px);
+}
+
+.hero-badge {
+    display: none;
+}
+
+.hero-text h1 {
+    margin: 0 0 26px;
+    color: #1f2624;
+    font-size: clamp(3.45rem, 5.25vw, 4.6rem);
+    font-weight: 800;
+    line-height: .9;
+    letter-spacing: -.065em;
+}
+
+.hero-title-sans,
+.hero-title-serif {
+    display: block;
+}
+
+.hero-title-serif {
+    margin: .08em 0 .12em -.04em;
+    color: #4d675f;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.16em;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -.075em;
+    line-height: .82;
+}
+
+.hero-description {
+    max-width: 440px;
+    margin: 0 0 30px;
+    color: #35433e;
+    font-size: 1.05rem;
+    line-height: 1.55;
+}
+
+.hero-buttons {
+    align-items: center;
+    gap: 24px;
+    margin: 0;
+}
+
+.hero-buttons .btn-primary {
+    min-height: 52px;
+    padding: 0 24px;
+    border: 1px solid #273631;
+    border-radius: 0;
+    background: #273631;
+    box-shadow: none;
+    font-size: .96rem;
+}
+
+.hero-buttons .btn-primary:hover {
+    background: #4d675f;
+    border-color: #4d675f;
+    transform: translateY(-2px);
+    box-shadow: none;
+}
+
+.hero-services-link {
+    color: #273631;
+    font-size: .98rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.hero-services-link::after {
+    content: '';
+    display: block;
+    width: 100%;
+    margin-top: 4px;
+    border-bottom: 1px solid currentColor;
+}
+
+.hero-stats {
+    position: absolute;
+    bottom: 38px;
+    left: 32px;
+    display: flex;
+    gap: 30px;
+    margin: 0;
+}
+
+.hero-stats .stat {
+    gap: 2px;
+}
+
+.hero-stats .stat-number {
+    color: #273631;
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: -.02em;
+}
+
+.hero-stats .stat-label {
+    color: #4b5c56;
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .025em;
+    text-transform: uppercase;
+}
+
+.hero-wave {
+    display: none;
+}
+
+@media (max-width: 1024px) {
+    .hero {
+        min-height: 88svh;
+        height: 88svh;
+        padding-top: 76px;
+    }
+
+    .hero-bg,
+    body.dark-mode .hero-bg {
+        background-position: 68% center;
+    }
+
+    .hero-content {
+        min-height: calc(88svh - 76px);
+        height: calc(88svh - 76px);
+        padding: 0 28px;
+    }
+
+    .hero-text {
+        width: min(48%, 440px);
+        padding-top: clamp(82px, 13vh, 128px);
+    }
+
+    .hero-text h1 {
+        font-size: clamp(3rem, 6vw, 4.4rem);
+    }
+
+    .hero-stats {
+        bottom: 30px;
+        left: 28px;
+    }
+}
+
+@media (max-width: 767px) {
+    .hero {
+        min-height: 760px;
+        height: 100svh;
+        padding-top: 68px;
+    }
+
+    .hero-bg,
+    body.dark-mode .hero-bg {
+        background-position: 71% center;
+    }
+
+    .hero-content {
+        min-height: calc(100svh - 68px);
+        height: calc(100svh - 68px);
+        padding: 0 18px;
+    }
+
+    .hero-text {
+        width: min(55%, 280px);
+        max-width: 280px;
+        padding-top: clamp(72px, 12vh, 108px);
+    }
+
+    .hero-text h1 {
+        margin-bottom: 18px;
+        font-size: clamp(2.35rem, 10.2vw, 3.35rem);
+        line-height: .9;
+    }
+
+    .hero-title-serif {
+        margin-top: .1em;
+        margin-bottom: .14em;
+    }
+
+    .hero-description {
+        margin-bottom: 22px;
+        font-size: .88rem;
+        line-height: 1.45;
+    }
+
+    .hero-buttons {
+        width: auto;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+    }
+
+    .hero-buttons .btn-primary {
+        min-height: 46px;
+        padding: 0 17px;
+        font-size: .84rem;
+    }
+
+    .hero-services-link {
+        font-size: .86rem;
+    }
+
+    .hero-stats {
+        bottom: 26px;
+        left: 18px;
+        width: min(61%, 300px);
+        gap: 12px;
+    }
+
+    .hero-stats .stat-number {
+        font-size: .84rem;
+    }
+
+    .hero-stats .stat-label {
+        font-size: .55rem;
+        line-height: 1.2;
+    }
+}
+
+@media (max-width: 380px) {
+    .hero-text {
+        width: 57%;
+    }
+
+    .hero-text h1 {
+        font-size: 2.15rem;
+    }
+
+    .hero-description {
+        font-size: .8rem;
+    }
+
+    .hero-stats {
+        width: 63%;
+        gap: 8px;
+    }
+}
+
+/* Hero polish: spacing, readable contrast, and supporting statistics */
+.hero-text h1 {
+    margin-bottom: 34px;
+}
+
+.hero-title-serif {
+    color: #3e5d54;
+}
+
+.hero-description {
+    margin-bottom: 38px;
+    color: #263c35;
+}
+
+.hero-stats {
+    position: static;
+    display: flex;
+    gap: 30px;
+    margin: 38px 0 0;
+}
+
+.hero-stats .stat {
+    gap: 4px;
+}
+
+.hero-stats .stat-number {
+    color: #273631;
+    font-size: 1.35rem;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.hero-stats .stat-rating::after {
+    content: " ★";
+}
+
+.hero-stats .stat-label {
+    color: #3e5049;
+    font-size: .76rem;
+    font-weight: 600;
+    letter-spacing: .025em;
+    text-transform: none;
+}
+
+body.dark-mode .hero-text h1,
+body.dark-mode .hero-services-link,
+body.dark-mode .hero-stats .stat-number {
+    color: #f4f0e8;
+}
+
+body.dark-mode .hero-title-serif {
+    color: #b9e3d1;
+}
+
+body.dark-mode .hero-description {
+    color: #edf4ee;
+}
+
+body.dark-mode .hero-stats .stat-label {
+    color: #d4e0d8;
+}
+
+@media (max-width: 767px) {
+    .hero-text h1 {
+        margin-bottom: 24px;
+    }
+
+    .hero-description {
+        margin-bottom: 30px;
+    }
+
+    .hero-stats {
+        width: min(61%, 300px);
+        gap: 14px;
+        margin-top: 30px;
+    }
+
+    .hero-stats .stat-number {
+        font-size: 1rem;
+    }
+
+    .hero-stats .stat-label {
+        font-size: .62rem;
+        line-height: 1.2;
+    }
+}
+
+@media (max-width: 380px) {
+    .hero-stats {
+        width: 63%;
+        gap: 10px;
+    }
+}
+
+/* Integrated navbar over the Hero composition */
+.header {
+    background: transparent;
+    backdrop-filter: none;
+    box-shadow: none;
+}
+
+body.dark-mode .header {
+    background: transparent;
+    border-bottom-color: transparent;
+}
+/* Navbar scrolls away with the opening Hero */
+.header {
+    position: absolute;
+}
+/* Simplified Hero navbar alignment */
+@media (min-width: 768px) {
+    .nav {
+        justify-content: flex-start;
+    }
+
+    .nav-menu {
+        margin-left: clamp(24px, 5vw, 72px);
+    }
+
+    .theme-toggle {
+        margin-left: 20px;
+    }
+
+    .hero-title-sans,
+    .hero-title-serif {
+        white-space: nowrap;
+    }
+}
+/* Remove navbar separators so it blends fully into the Hero */
+.header,
+body.dark-mode .header {
+    border-bottom: none !important;
+    box-shadow: none !important;
+}
+/* Hero video uses the exact former image framing */
+.hero-bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 72% center;
+}@media (max-width: 1024px) {
+    .hero-bg {
+        object-position: 68% center;
+    }
+}
+
+@media (max-width: 767px) {
+    .hero-bg {
+        object-position: 71% center;
+    }
 }

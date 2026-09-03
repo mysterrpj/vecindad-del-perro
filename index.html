@@ -29,16 +29,13 @@
                 <span class="logo-text">La Vecindad del Perro</span>
             </a>
             <ul class="nav-menu">
-                <li><a href="#inicio">Inicio</a></li>
-                <li><a href="#servicios">Servicios</a></li>
                 <li><a href="#galeria">Galería</a></li>
                 <li><a href="#testimonios">Testimonios</a></li>
                 <li><a href="#contacto">Contacto</a></li>
             </ul>
-            <a href="#contacto" class="btn btn-primary">Reservar Cita</a>
             <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema" data-tooltip="Modo Oscuro">
-                <span class="theme-icon-light">☀️</span>
-                <span class="theme-icon-dark">🌙</span>
+                <span class="theme-icon-light"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"></circle><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4l1.4-1.4M18 6l1.4-1.4"></path></svg></span>
+                <span class="theme-icon-dark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"></path></svg></span>
             </button>
             <button class="nav-toggle" id="navToggle">
                 <span></span>
@@ -50,37 +47,34 @@
 
     <!-- Hero Section -->
     <section class="hero" id="inicio">
-        <div class="hero-bg"></div>
+        <video class="hero-bg" autoplay loop muted playsinline aria-hidden="true"><source src="assets/images/Dog_blinking_in_pet_spa_202609030859.mp4" type="video/mp4"></video>
         <div class="container hero-content">
             <div class="hero-text">
-                <span class="hero-badge">✨ Cuidado Premium para tu Mascota</span>
-                <h1>Dale a tu peludo el <span class="gradient-text">spa que merece</span></h1>
-                <p>Ofrecemos servicios de baño, grooming, indumentaria y cuidados especiales para que tu mascota luzca y
-                    se sienta increíble.</p>
-                <p class="hero-description">
-                    <span class="hero-copy-desktop">Ofrecemos servicios de baño, grooming, indumentaria y cuidados especiales para que tu mascota luzca y se sienta increíble.</span>
-                    <span class="hero-copy-mobile">Baño, grooming y cuidados especiales para que tu mascota luzca increíble.</span>
-                </p>
+                <h1>
+                    <span class="hero-title-sans">Tu peludo merece</span>
+                    <span class="hero-title-serif">un momento</span>
+                    <span class="hero-title-sans">extraordinario.</span>
+                </h1>
+                <p class="hero-description">Baño, grooming y cuidados pensados para que salga limpio, feliz y espectacular.</p>
                 <div class="hero-buttons">
-                    <a href="#servicios" class="btn btn-primary btn-lg">Ver Servicios</a>
-                    <a href="#contacto" class="btn btn-outline btn-lg">Agendar Cita</a>
-                </div>
-                <div class="hero-stats">
-                    <div class="stat">
-                        <span class="stat-number">500+</span>
-                        <span class="stat-label">Mascotas Felices</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-number">5</span>
-                        <span class="stat-label">Años de Experiencia</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-number">4.9</span>
-                        <span class="stat-label">Calificación ⭐</span>
-                    </div>
+                    <a href="#contacto" class="btn btn-primary btn-lg">Reservar cita <span aria-hidden="true">→</span></a>
+                    <a href="#servicios" class="hero-services-link">Ver servicios</a>
                 </div>
             </div>
-            <!-- Imagen movida a sección "Por qué elegirnos" -->
+            <div class="hero-stats" aria-label="Nuestros resultados">
+                <div class="stat">
+                    <span class="stat-number">500+</span>
+                    <span class="stat-label">Mascotas felices</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">5+</span>
+                    <span class="stat-label">Años de experiencia</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number stat-rating">4.9</span>
+                    <span class="stat-label">Calificación</span>
+                </div>
+            </div>
         </div>
         <div class="hero-wave">
             <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -494,8 +488,6 @@
                 <div class="footer-links">
                     <h4>Enlaces</h4>
                     <ul>
-                        <li><a href="#inicio">Inicio</a></li>
-                        <li><a href="#servicios">Servicios</a></li>
                         <li><a href="#galeria">Galería</a></li>
                         <li><a href="#contacto">Contacto</a></li>
                         <li><a href="dashboard/login.html">Dashboard</a></li>

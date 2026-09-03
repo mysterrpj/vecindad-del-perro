@@ -5,8 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const themeToggle = document.getElementById('themeToggle');
     const body = document.body;
-    const iconLight = document.querySelector('.theme-icon-light');
-    const iconDark = document.querySelector('.theme-icon-dark');
     const mobileThemeQuery = window.matchMedia('(max-width: 768px)');
 
     // Check for saved user preference
@@ -64,16 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateIcons(isDark) {
-        if (!iconLight || !iconDark) return;
-
-        if (isDark) {
-            iconLight.style.display = 'inline';
-            iconDark.style.display = 'none';
-            if (themeToggle) themeToggle.setAttribute('data-tooltip', 'Modo Claro');
-        } else {
-            iconLight.style.display = 'none';
-            iconDark.style.display = 'inline';
-            if (themeToggle) themeToggle.setAttribute('data-tooltip', 'Modo Oscuro');
-        }
+        if (themeToggle) themeToggle.setAttribute("data-tooltip", isDark ? "Modo Claro" : "Modo Oscuro");
     }
 });
