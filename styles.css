@@ -1,31 +1,31 @@
 /* ===== CSS Variables ===== */
 :root {
-    --primary: #7c3aed;
-    --primary-light: #a78bfa;
-    --primary-dark: #5b21b6;
-    --secondary: #f472b6;
-    --accent: #fbbf24;
-    --gradient: linear-gradient(135deg, #7c3aed 0%, #f472b6 100%);
-    --gradient-text: linear-gradient(135deg, #7c3aed 0%, #f472b6 50%, #fbbf24 100%);
+    --primary: #273631;
+    --primary-light: #4d675f;
+    --primary-dark: #1b2421;
+    --secondary: #3e5d54;
+    --accent: #b9895f;
+    --gradient: linear-gradient(135deg, #273631 0%, #3e5d54 100%);
+    --gradient-text: linear-gradient(135deg, #273631 0%, #3e5d54 55%, #6f8a80 100%);
 
-    --bg-primary: #fefefe;
-    --bg-secondary: #f8f5ff;
+    --bg-primary: #fdfcf9;
+    --bg-secondary: #f3ede5;
     --bg-card: #ffffff;
     --bg-card-light-mode: #ffffff;
-    --bg-dark: #1e1b4b;
+    --bg-dark: #182019;
 
-    --text-primary: #1e1b4b;
-    --text-primary-light-mode: #1e1b4b;
+    --text-primary: #1f2624;
+    --text-primary-light-mode: #1f2624;
     /* Hardcoded dark text for white sections */
-    --text-secondary: #6b7280;
-    --text-light: #9ca3af;
+    --text-secondary: #5a6a64;
+    --text-light: #8a958f;
 
-    --border-color: #e5e7eb;
+    --border-color: #e4e1da;
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    --shadow-glow: 0 0 40px rgba(124, 58, 237, 0.3);
+    --shadow-glow: 0 0 40px rgba(39, 54, 49, 0.22);
 
     --radius-sm: 8px;
     --radius-md: 12px;
@@ -39,21 +39,26 @@
 
 /* ===== Dark Mode Variables ===== */
 body.dark-mode {
-    --bg-primary: #1e1b4b;
-    /* Midnight Blue */
-    --bg-secondary: #0f0e2b;
-    /* Darker Midnight Blue */
-    --bg-card: #2a2760;
-    /* Lighter Midnight Blue for cards */
-    --bg-dark: #0f0e2b;
+    --primary: #a9d3c1;
+    --primary-light: #cfe8dc;
+    --primary-dark: #6f9d8a;
+    --secondary: #8fb8a6;
+    --accent: #d2a985;
+    --gradient: linear-gradient(135deg, #223a32 0%, #3f6053 100%);
+    --gradient-text: linear-gradient(135deg, #a9d3c1 0%, #cfe8dc 100%);
 
-    --text-primary: #ffffff;
-    --text-secondary: #cbd5e1;
-    /* Light Gray */
-    --text-light: #94a3b8;
+    --bg-primary: #182019;
+    --bg-secondary: #0e1411;
+    --bg-card: #233029;
+    /* Lighter green-charcoal for cards */
+    --bg-dark: #0c110e;
 
-    --border-color: #4338ca;
-    /* Indigo 700 */
+    --text-primary: #f5f2ec;
+    --text-secondary: #b7c5be;
+    --text-light: #8ba098;
+
+    --border-color: #34534a;
+    /* Muted sage border */
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
@@ -408,36 +413,39 @@ img {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 12px 28px;
+    padding: 13px 26px;
     font-family: inherit;
     font-size: 1rem;
     font-weight: 500;
-    border: none;
-    border-radius: var(--radius-full);
+    border: 1px solid transparent;
+    border-radius: 0;
     cursor: pointer;
-    transition: var(--transition);
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
 }
 
 .btn-primary {
-    background: var(--gradient);
-    color: white;
-    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+    background: #273631;
+    border-color: #273631;
+    color: #f7f3ec;
+    box-shadow: none;
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
+    background: #3e5d54;
+    border-color: #3e5d54;
+    transform: translateY(-1px);
+    box-shadow: none;
 }
 
 .btn-outline {
     background: transparent;
-    color: var(--primary);
-    border: 2px solid var(--primary);
+    color: #273631;
+    border: 1px solid #273631;
 }
 
 .btn-outline:hover {
-    background: var(--primary);
-    color: white;
+    background: #273631;
+    color: #f7f3ec;
 }
 
 .btn-lg {
@@ -2757,4 +2765,48 @@ body.dark-mode .header {
     .hero-bg {
         object-position: 71% center;
     }
+}
+
+/* Acentos serif editoriales en titulos (coherentes con el hero) */
+h2 .gradient-text,
+h3 .gradient-text {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    background: none;
+    background-clip: initial;
+    -webkit-background-clip: initial;
+    color: #3e5d54;
+    -webkit-text-fill-color: #3e5d54;
+}
+
+body.dark-mode h2 .gradient-text,
+body.dark-mode h3 .gradient-text {
+    color: #b9e3d1;
+    -webkit-text-fill-color: #b9e3d1;
+}
+
+
+/* Botones en modo oscuro: salvia para mantener contraste */
+body.dark-mode .btn-primary {
+    background: #a9d3c1;
+    border-color: #a9d3c1;
+    color: #14201b;
+}
+
+body.dark-mode .btn-primary:hover {
+    background: #cfe8dc;
+    border-color: #cfe8dc;
+    color: #14201b;
+}
+
+body.dark-mode .btn-outline {
+    color: #a9d3c1;
+    border-color: #a9d3c1;
+}
+
+body.dark-mode .btn-outline:hover {
+    background: #a9d3c1;
+    color: #14201b;
 }
