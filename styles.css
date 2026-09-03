@@ -809,67 +809,6 @@ img {
     border: none;
 }
 
-/* Unique Service Card Colors - VIBRANT MODERN (Option B) */
-.service-card.card-blue {
-    background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
-    border-color: #2563eb;
-    color: white;
-}
-
-.service-card.card-purple {
-    background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);
-    border-color: #7c3aed;
-    color: white;
-}
-
-.service-card.card-pink {
-    background: linear-gradient(135deg, #f472b6 0%, #db2777 100%);
-    border-color: #db2777;
-    color: white;
-}
-
-.service-card.card-green {
-    background: linear-gradient(135deg, #4ade80 0%, #16a34a 100%);
-    border-color: #16a34a;
-    color: white;
-}
-
-.service-card.card-teal {
-    background: linear-gradient(135deg, #2dd4bf 0%, #0d9488 100%);
-    border-color: #0d9488;
-    color: white;
-}
-
-.service-card.card-orange {
-    background: linear-gradient(135deg, #fbbf24 0%, #ea580c 100%);
-    border-color: #ea580c;
-    color: white;
-}
-
-/* Ensure icons and price tags look good on VIBRANT colored backgrounds */
-.service-card[class*="card-"] .service-icon {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-}
-
-.service-card[class*="card-"] .service-price {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    font-weight: 600;
-}
-
-.service-card[class*="card-"] .service-features li {
-    color: rgba(255, 255, 255, 0.95);
-}
-
-/* Hover effects for colored cards */
-.service-card[class*="card-"]:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    filter: brightness(1.05);
-    /* Make slightly brighter on hover */
-}
-
 .service-card.featured .service-icon {
     background: rgba(255, 255, 255, 0.2);
 }
@@ -2808,5 +2747,125 @@ body.dark-mode .btn-outline {
 
 body.dark-mode .btn-outline:hover {
     background: #a9d3c1;
+    color: #14201b;
+}
+
+/* === Tarjetas de servicio: tintes suaves por color === */
+.service-card.card-blue {
+    background: #eef5fc;
+    border-color: #cfe0f2;
+    color: #1f2624;
+}
+.service-card.card-purple {
+    background: #f3f0fb;
+    border-color: #ddd2ef;
+    color: #1f2624;
+}
+.service-card.card-pink {
+    background: #fceef4;
+    border-color: #f3d2e1;
+    color: #1f2624;
+}
+.service-card.card-orange {
+    background: #fcf2e9;
+    border-color: #f0d9c1;
+    color: #1f2624;
+}
+.service-card.card-teal {
+    background: #ebf7f5;
+    border-color: #c8e8e4;
+    color: #1f2624;
+}
+.service-card.card-green {
+    background: #edf6ef;
+    border-color: #cfe5d5;
+    color: #1f2624;
+}
+
+.service-card[class*="card-"] .service-icon {
+    background: rgba(62, 93, 84, 0.08);
+    color: #3e5d54;
+}
+.service-card.card-blue .service-icon { background: rgba(37, 99, 235, 0.09); color: #2563eb; }
+.service-card.card-purple .service-icon { background: rgba(124, 58, 237, 0.09); color: #7c3aed; }
+.service-card.card-pink .service-icon { background: rgba(219, 39, 119, 0.09); color: #db2777; }
+.service-card.card-orange .service-icon { background: rgba(234, 88, 12, 0.09); color: #ea580c; }
+.service-card.card-teal .service-icon { background: rgba(13, 148, 136, 0.09); color: #0d9488; }
+.service-card.card-green .service-icon { background: rgba(22, 163, 74, 0.09); color: #16a34a; }
+
+.service-card[class*="card-"] .service-features li {
+    color: #4f5d58;
+}
+
+.service-card[class*="card-"] .service-footer {
+    border-top-color: rgba(39, 54, 49, 0.1);
+}
+
+.service-card[class*="card-"] .service-price {
+    background: rgba(39, 54, 49, 0.07);
+    color: #273631;
+}
+.service-card.card-blue .service-price { background: rgba(37, 99, 235, 0.1); color: #2563eb; }
+.service-card.card-purple .service-price { background: rgba(124, 58, 237, 0.1); color: #7c3aed; }
+.service-card.card-pink .service-price { background: rgba(219, 39, 119, 0.1); color: #db2777; }
+.service-card.card-orange .service-price { background: rgba(234, 88, 12, 0.1); color: #ea580c; }
+.service-card.card-teal .service-price { background: rgba(13, 148, 136, 0.1); color: #0d9488; }
+.service-card.card-green .service-price { background: rgba(22, 163, 74, 0.1); color: #16a34a; }
+
+.service-card[class*="card-"]:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 30px -12px rgba(39, 54, 49, 0.16);
+    filter: none;
+}
+.service-card.card-blue:hover { border-color: #8db8dd; }
+.service-card.card-purple:hover { border-color: #b4a4e0; }
+.service-card.card-pink:hover { border-color: #e0a7c6; }
+.service-card.card-orange:hover { border-color: #ddab82; }
+.service-card.card-teal:hover { border-color: #84cfc8; }
+.service-card.card-green:hover { border-color: #9dc9aa; }
+
+.service-card[class*="card-"] .btn-pay {
+    background: #273631;
+    border-color: #273631;
+    color: #f7f3ec;
+    box-shadow: none;
+}
+.service-card[class*="card-"] .btn-pay:hover {
+    background: #3e5d54;
+    border-color: #3e5d54;
+    color: #f7f3ec;
+    transform: translateY(-1px);
+    box-shadow: none;
+}
+
+/* Modo oscuro: mantener tarjetas neutras legibles */
+body.dark-mode .service-card[class*="card-"] {
+    color: #f5f2ec;
+}
+body.dark-mode .service-card[class*="card-"] .service-features li {
+    color: #b7c5be;
+}
+body.dark-mode .service-card[class*="card-"] .service-footer {
+    border-top-color: rgba(169, 211, 193, 0.14);
+}
+body.dark-mode .service-card[class*="card-"] .service-icon {
+    background: rgba(169, 211, 193, 0.12);
+    color: #cfe8dc;
+}
+body.dark-mode .service-card[class*="card-"] .service-price {
+    background: rgba(169, 211, 193, 0.12);
+    color: #cfe8dc;
+}
+body.dark-mode .service-card[class*="card-"]:hover {
+    border-color: #34534a;
+}
+body.dark-mode .service-card[class*="card-"] .btn-pay {
+    background: #a9d3c1;
+    border-color: #a9d3c1;
+    color: #14201b;
+}
+body.dark-mode .service-card[class*="card-"] .btn-pay:hover {
+    background: #cfe8dc;
+    border-color: #cfe8dc;
     color: #14201b;
 }
