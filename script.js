@@ -15,21 +15,16 @@ document.querySelectorAll('.nav-menu a').forEach(link => {
     });
 });
 
-// Header scroll effect
+// Header scroll effect: se fija con fondo al bajar y vuelve transparente arriba
 const header = document.querySelector('.header');
-let lastScroll = 0;
 
-window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
+function updateHeader() {
+    if (!header) return;
+    header.classList.toggle('scrolled', window.scrollY > 140);
+}
 
-    if (currentScroll > 100) {
-        if (header) header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
-    } else {
-        if (header) header.style.boxShadow = 'var(--shadow-sm)';
-    }
-
-    lastScroll = currentScroll;
-});
+window.addEventListener('scroll', updateHeader, { passive: true });
+updateHeader();
 
 // Smooth scroll for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
