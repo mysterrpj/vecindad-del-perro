@@ -15,12 +15,13 @@ document.querySelectorAll('.nav-menu a').forEach(link => {
     });
 });
 
-// Header scroll effect: se fija con fondo al bajar y vuelve transparente arriba
+// Header scroll effect: transparente sobre el hero y fijo al pasar la seccion
 const header = document.querySelector('.header');
+const heroEl = document.querySelector('.hero');
 
 function updateHeader() {
-    if (!header) return;
-    header.classList.toggle('scrolled', window.scrollY > 140);
+    if (!header || !heroEl) return;
+    header.classList.toggle('scrolled', window.scrollY >= heroEl.offsetHeight);
 }
 
 window.addEventListener('scroll', updateHeader, { passive: true });
