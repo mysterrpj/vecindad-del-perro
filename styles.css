@@ -1187,8 +1187,7 @@ img {
 
 .polaroid-caption h3 {
     margin: 0 0 5px;
-    font-family: 'Comic Neue', 'Fredoka', sans-serif;
-    /* Playful font */
+    font-family: inherit;
     color: #333;
     font-size: 1.3rem;
 }
@@ -2868,4 +2867,20 @@ body.dark-mode .service-card[class*="card-"] .btn-pay:hover {
     background: #cfe8dc;
     border-color: #cfe8dc;
     color: #14201b;
+}
+
+
+/* Iconos lineales en why-us */
+.feature-icon {
+    color: #3e5d54;
+}
+.feature-icon svg,
+.floating-card svg {
+    display: block;
+}
+.floating-card span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #3e5d54;
 }
