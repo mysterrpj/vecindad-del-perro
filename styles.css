@@ -2921,3 +2921,39 @@ body.dark-mode .header.scrolled {
     background: rgba(13, 18, 16, 0.86);
     box-shadow: 0 1px 0 rgba(185, 227, 209, 0.08), 0 12px 28px -22px rgba(0, 0, 0, 0.7) !important;
 }
+
+
+/* Iconos lineales en servicios y galeria */
+.service-icon svg {
+    display: block;
+}
+
+.heart-icon svg,
+.heart-icon-right svg,
+.sparkle svg,
+.heart-decoration svg,
+.sparkle-decoration svg,
+.paw-decoration svg {
+    vertical-align: middle;
+}
+
+.heart-icon,
+.heart-icon-right,
+.heart-decoration {
+    color: #d98aa4;
+}
+
+.sparkle,
+.sparkle-decoration {
+    color: #c99a63;
+}
+
+.paw-decoration {
+    color: #3e5d54;
+}
+
+.star-decoration,
+.stars {
+    color: #d9a441;
+    letter-spacing: 2px;
+}
