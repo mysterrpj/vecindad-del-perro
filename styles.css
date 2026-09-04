@@ -2884,3 +2884,18 @@ body.dark-mode .service-card[class*="card-"] .btn-pay:hover {
     justify-content: center;
     color: #3e5d54;
 }
+
+
+/* Scrim oscuro sutil sobre el video del hero en modo oscuro */
+.hero-bg {
+    z-index: 0;
+}
+
+body.dark-mode .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: linear-gradient(90deg, rgba(9, 13, 11, 0.66) 0%, rgba(9, 13, 11, 0.42) 38%, rgba(9, 13, 11, 0.16) 66%, rgba(9, 13, 11, 0.05) 100%);
+}
