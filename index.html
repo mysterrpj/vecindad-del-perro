@@ -29,6 +29,7 @@
                 <span class="logo-text">La Vecindad del Perro</span>
             </a>
             <ul class="nav-menu">
+                <li><a href="#servicios">Servicios</a></li>
                 <li><a href="#galeria">Galería</a></li>
                 <li><a href="#testimonios">Testimonios</a></li>
                 <li><a href="#contacto">Contacto</a></li>
@@ -58,7 +59,6 @@
                 <p class="hero-description">Baño, grooming y cuidados pensados para que salga limpio, feliz y espectacular.</p>
                 <div class="hero-buttons">
                     <a href="#contacto" class="btn btn-primary btn-lg">Reservar cita <span aria-hidden="true">→</span></a>
-                    <a href="#servicios" class="hero-services-link">Ver servicios</a>
                 </div>
             </div>
             <div class="hero-stats" aria-label="Nuestros resultados">
@@ -105,13 +105,13 @@
                         <li>✓ Secado con aire tibio</li>
                     </ul>
                     <div class="service-footer">
-                        <span class="service-price">S/35</span>
+                        <span class="service-price">Desde S/35</span>
                         <button class="btn btn-primary btn-sm btn-pay" data-service="Baño Completo"
-                            data-price="3500">Pagar</button>
+                            data-price="3500" hidden>Pagar</button>
                     </div>
                 </div>
                 <div class="service-card card-purple">
-                    <div class="service-badge">⭐ Popular</div>
+                    <div class="service-badge">M&aacute;s elegido</div>
                     <div class="service-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="20" y1="4" x2="8.12" y2="15.88"></line><line x1="14.47" y1="14.48" x2="20" y2="20"></line><line x1="8.12" y1="8.12" x2="12" y2="12"></line></svg></div>
                     <h3>Grooming Completo</h3>
                     <p>Baño + corte de pelo según la raza, diseño personalizado y acabado profesional.</p>
@@ -121,9 +121,9 @@
                         <li>✓ Perfume y lazo/pañuelo</li>
                     </ul>
                     <div class="service-footer">
-                        <span class="service-price">S/55</span>
+                        <span class="service-price">Desde S/55</span>
                         <button class="btn btn-primary btn-sm btn-pay" data-service="Grooming Completo"
-                            data-price="5500">Pagar</button>
+                            data-price="5500" hidden>Pagar</button>
                     </div>
                 </div>
                 <div class="service-card card-pink">
@@ -136,9 +136,9 @@
                         <li>✓ Disfraces temáticos</li>
                     </ul>
                     <div class="service-footer">
-                        <span class="service-price">S/20</span>
+                        <span class="service-price">Desde S/20</span>
                         <button class="btn btn-primary btn-sm btn-pay" data-service="Indumentaria"
-                            data-price="2000">Pagar</button>
+                            data-price="2000" hidden>Pagar</button>
                     </div>
                 </div>
                 <div class="service-card card-orange">
@@ -152,9 +152,9 @@
                         <li>✓ Baño de burbujas</li>
                     </ul>
                     <div class="service-footer">
-                        <span class="service-price">S/65</span>
+                        <span class="service-price">Desde S/65</span>
                         <button class="btn btn-primary btn-sm btn-pay" data-service="Spa Relax"
-                            data-price="6500">Pagar</button>
+                            data-price="6500" hidden>Pagar</button>
                     </div>
                 </div>
                 <div class="service-card card-teal">
@@ -167,9 +167,9 @@
                         <li>✓ Aliento fresco</li>
                     </ul>
                     <div class="service-footer">
-                        <span class="service-price">S/25</span>
+                        <span class="service-price">Desde S/25</span>
                         <button class="btn btn-primary btn-sm btn-pay" data-service="Higiene Dental"
-                            data-price="2500">Pagar</button>
+                            data-price="2500" hidden>Pagar</button>
                     </div>
                 </div>
                 <div class="service-card card-green">
@@ -182,12 +182,16 @@
                         <li>✓ Sin estrés de transporte</li>
                     </ul>
                     <div class="service-footer">
-                        <span class="service-price">S/15</span>
+                        <span class="service-price">Desde S/15</span>
                         <button class="btn btn-primary btn-sm btn-pay" data-service="Servicio a Domicilio"
-                            data-price="1500">Pagar</button>
+                            data-price="1500" hidden>Pagar</button>
                     </div>
                 </div>
 
+            </div>
+            <p class="services-price-note">El precio final se confirma seg&uacute;n el tama&ntilde;o, la raza, el tipo de pelaje y la zona de atenci&oacute;n.</p>
+            <div class="section-footer services-cta">
+                <a class="btn btn-primary btn-lg" href="https://wa.me/51970716064?text=Hola%2C%20quiero%20consultar%20por%20sus%20servicios%20y%20disponibilidad%20para%20mi%20mascota." target="_blank" rel="noopener">Consultar servicios por WhatsApp</a>
             </div>
         </div>
     </section>
@@ -551,7 +555,7 @@
     </button>
 
     <!-- Cart Modal -->
-    <div class="modal-overlay" id="cartOverlay">
+    <div class="modal-overlay" id="cartOverlay" hidden aria-hidden="true">
         <div class="cart-modal">
             <div class="cart-header">
                 <h3>Finalizar Compra</h3>
@@ -570,7 +574,7 @@
         </div>
     </div>
 
-    <script src="https://checkout.culqi.com/js/v4"></script>
+    <!-- Culqi queda desactivado temporalmente mientras los pagos se coordinan por WhatsApp. -->
 
     <script src="config.js"></script>
     <script src="data-store.js"></script>

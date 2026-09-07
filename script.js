@@ -233,7 +233,8 @@ window.addEventListener('scroll', () => {
 // --- CULQI INTEGRATION & CART LOGIC ---
 
 // Configuration for Culqi (Test Key)
-const CULQI_PUBLIC_KEY = window.CONFIG?.CULQI_PUBLIC_KEY || 'pk_test_ed8f4c7d0d0c4d7e'; // Fallback to generic test key if config missing
+const ONLINE_PAYMENTS_ENABLED = false;
+const CULQI_PUBLIC_KEY = window.CONFIG?.CULQI_PUBLIC_KEY || 'pk_test_ed8f4c7d0d0c4d7e'; // Reservado para cuando se reactive Culqi
 
 let currentCart = {
     service: "",
@@ -342,12 +343,13 @@ function initCulqi() {
 }
 
 // Start watching for Culqi only on pages with checkout UI.
-if (document.querySelector('.btn-pay') || btnCheckout) {
+if (ONLINE_PAYMENTS_ENABLED && (document.querySelector('.btn-pay') || btnCheckout)) {
     initCulqi();
 }
 
 // Checkout Button logic
 btnCheckout?.addEventListener('click', () => {
+    if (!ONLINE_PAYMENTS_ENABLED) return;
     if (!window.Culqi) {
         showNotification('Error: La pasarela de pagos no está lista. Recarga la página.');
         return;
