@@ -1352,6 +1352,35 @@ img {
     color: var(--text-secondary);
 }
 
+.contact-action-link {
+    display: inline-flex;
+    margin-top: 6px;
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.contact-whatsapp-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 48px;
+    padding: 12px 18px;
+    border-radius: var(--radius-md);
+    background: var(--primary);
+    color: white;
+    font-weight: 700;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.contact-whatsapp-btn:hover {
+    background: var(--primary-dark);
+    color: white;
+    transform: translateY(-2px);
+}
+
 .social-links {
     display: flex;
     gap: 12px;
@@ -1386,8 +1415,23 @@ img {
     margin-bottom: 24px;
 }
 
+.form-intro {
+    margin: -8px 0 24px;
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+}
+
 .form-group {
     margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-primary-light-mode);
+    font-size: 0.9375rem;
+    font-weight: 600;
 }
 
 .form-group input,

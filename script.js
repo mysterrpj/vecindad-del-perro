@@ -60,22 +60,22 @@ contactForm?.addEventListener('submit', function (e) {
         petName: document.getElementById('petName').value,
         service: serviceLabel,
         message: document.getElementById('message').value,
-        source: 'Formulario web'
+        source: 'Solicitud desde formulario web'
     };
 
     window.BusinessStore?.createReservation(formData);
 
     const whatsappNumber = window.CONFIG?.WHATSAPP_NUMBER || '51970716064';
     const whatsappText = [
-        'Hola, quiero reservar una cita para mi mascota.',
+        'Hola, quiero coordinar una cita para mi mascota.',
         `Nombre: ${formData.name}`,
         `Telefono: ${formData.phone}`,
         `Mascota: ${formData.petName}`,
         `Servicio: ${formData.service}`,
-        formData.message ? `Mensaje: ${formData.message}` : ''
+        'Detalles adicionales (opcional):'
     ].filter(Boolean).join('\n');
 
-    showNotification('Reserva registrada. Te abriremos WhatsApp para coordinar la hora.');
+    showNotification('Abriremos WhatsApp para coordinar el horario de tu cita.');
 
     contactForm.reset();
     window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappText)}`, '_blank');

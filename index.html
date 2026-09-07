@@ -410,7 +410,7 @@
             <div class="contact-wrapper">
                 <div class="contact-info">
                     <span class="section-badge">Contáctanos</span>
-                    <h2>Agenda tu cita <span class="gradient-text">hoy</span></h2>
+                    <h2>Agenda por WhatsApp <span class="gradient-text">hoy</span></h2>
                     <p>Estamos listos para consentir a tu mascota. Contáctanos por cualquiera de estos medios.</p>
                     <div class="contact-details">
                         <div class="contact-item">
@@ -418,13 +418,14 @@
                             <div>
                                 <strong>Dirección</strong>
                                 <p>Mz P1 Lote 26, Montenegro, SJL</p>
+                                <a class="contact-action-link" href="https://www.google.com/maps/search/?api=1&query=Mz%20P1%20Lote%2026%2C%20Montenegro%2C%20San%20Juan%20de%20Lurigancho" target="_blank" rel="noopener">Cómo llegar</a>
                             </div>
                         </div>
                         <div class="contact-item">
                             <span class="contact-icon">📞</span>
                             <div>
                                 <strong>WhatsApp</strong>
-                                <p><a href="https://wa.me/51970716064" style="color: var(--primary);">970 716 064</a>
+                                <p><a href="https://wa.me/51970716064" style="color: var(--primary);" target="_blank" rel="noopener">970 716 064</a>
                                 </p>
                             </div>
                         </div>
@@ -436,23 +437,26 @@
                             </div>
                         </div>
                     </div>
-                    <div class="social-links">
-                        <a href="https://wa.me/51970716064" class="social-link" title="WhatsApp">💬</a>
-                    </div>
+                    <a href="https://wa.me/51970716064" class="contact-whatsapp-btn" target="_blank" rel="noopener">💬 Escríbenos por WhatsApp</a>
                 </div>
                 <div class="contact-form-wrapper">
                     <form class="contact-form" id="contactForm">
-                        <h3>Reserva tu cita</h3>
+                        <h3>Coordina tu cita por WhatsApp</h3>
+                        <p class="form-intro">No confirmamos horarios en la web: te responderemos por WhatsApp para coordinar contigo.</p>
                         <div class="form-group">
+                            <label for="name">Tu nombre</label>
                             <input type="text" id="name" placeholder="Tu nombre" required>
                         </div>
                         <div class="form-group">
+                            <label for="phone">Tu telefono</label>
                             <input type="tel" id="phone" placeholder="Tu teléfono" required>
                         </div>
                         <div class="form-group">
+                            <label for="petName">Nombre de tu mascota</label>
                             <input type="text" id="petName" placeholder="Nombre de tu mascota" required>
                         </div>
                         <div class="form-group">
+                            <label for="service">Servicio que necesitas</label>
                             <select id="service" required>
                                 <option value="">Selecciona un servicio</option>
                                 <option value="bano">Baño Completo</option>
@@ -462,10 +466,10 @@
                                 <option value="domicilio">Servicio a Domicilio</option>
                             </select>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" hidden>
                             <textarea id="message" placeholder="Mensaje adicional (opcional)"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-block">Enviar Reserva</button>
+                        <button type="submit" class="btn btn-primary btn-block">Continuar por WhatsApp</button>
                     </form>
                 </div>
             </div>
