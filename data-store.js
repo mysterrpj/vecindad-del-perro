@@ -30,6 +30,7 @@
     const firebaseState = {
         enabled: Boolean(window.CONFIG?.FIREBASE_CONFIG?.apiKey),
         ready: false,
+        authReady: false,
         error: null,
         app: null,
         auth: null,
@@ -37,6 +38,15 @@
         user: null,
         api: null
     };
+
+    let resolveAuthReady;
+    const authReadyPromise = new Promise((resolve) => { resolveAuthReady = resolve; });
+
+    function markAuthReady() {
+        if (firebaseState.authReady) return;
+        firebaseState.authReady = true;
+        resolveAuthReady();
+    }
 
     function clone(value) {
         return JSON.parse(JSON.stringify(value));
@@ -102,6 +112,7 @@
     async function initFirebase() {
         if (!firebaseState.enabled) {
             firebaseState.ready = true;
+            markAuthReady();
             return;
         }
 
@@ -114,13 +125,14 @@
             firebaseState.app = appModule.initializeApp(window.CONFIG.FIREBASE_CONFIG);
             firebaseState.auth = authModule.getAuth(firebaseState.app);
             firebaseState.db = firestoreModule.getFirestore(firebaseState.app);
-
             firebaseState.user = await new Promise((resolve) => {
                 const unsubscribe = authModule.onAuthStateChanged(firebaseState.auth, (user) => {
                     unsubscribe();
                     resolve(user);
                 });
             });
+
+            markAuthReady();
 
             if (firebaseState.user) {
                 await loadFromCloud();
@@ -131,6 +143,7 @@
             firebaseState.error = error;
             firebaseState.enabled = false;
             firebaseState.ready = true;
+            markAuthReady();
             console.error('Firebase no pudo inicializar. Se usara localStorage.', error);
         }
     }
@@ -372,6 +385,7 @@
 
     window.BusinessStore = {
         ready: readyPromise,
+        authReady: authReadyPromise,
         read,
         write,
         createReservation,

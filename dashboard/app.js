@@ -57,7 +57,7 @@
     // Se aplica de inmediato, antes de inicializar Firebase, para evitar el parpadeo al navegar.
     setActiveNav();
 
-    await window.BusinessStore.ready;
+    await window.BusinessStore.authReady;
 
     const firebaseEnabled = window.BusinessStore.isFirebaseEnabled();
     if (protectedPages) {
@@ -1333,5 +1333,66 @@
         configuracion: renderSettings
     };
 
-    renderers[page]?.();
+    const contentEl = document.getElementById('content');
+    let lastPainted = '';
+    let refreshPending = false;
+
+    function storeSnapshot() {
+        return JSON.stringify(window.BusinessStore.read());
+    }
+
+    function storeHasCachedData(store) {
+        return Boolean(
+            (store.reservations || []).length ||
+            (store.customers || []).length ||
+            (store.payments || []).length ||
+            (store.claims || []).length
+        );
+    }
+
+    function userIsEditing() {
+        const active = document.activeElement;
+        if (active && ['INPUT', 'TEXTAREA', 'SELECT'].includes(active.tagName)) return true;
+        return Boolean(document.querySelector('.service-modal-backdrop:not([hidden])'));
+    }
+
+    function paint() {
+        const snapshot = storeSnapshot();
+        if (snapshot === lastPainted) return;
+        lastPainted = snapshot;
+        renderers[page]?.();
+    }
+
+    // Primera pintura con los datos ya guardados en el navegador: la seccion
+    // aparece al instante, sin esperar a que Firestore responda.
+    if (storeHasCachedData(data())) {
+        paint();
+    } else if (contentEl) {
+        contentEl.innerHTML = '<p class="muted">Cargando datos...</p>';
+    }
+
+    // Cuando Firestore termina de responder, la seccion se actualiza sola.
+    window.BusinessStore.ready?.then(() => {
+        if (userIsEditing()) {
+            refreshPending = true;
+            return;
+        }
+        paint();
+    });
+
+    window.addEventListener('business-data-updated', () => {
+        if (userIsEditing()) {
+            refreshPending = true;
+            return;
+        }
+        paint();
+    });
+
+    document.addEventListener('focusout', () => {
+        if (!refreshPending) return;
+        refreshPending = false;
+        setTimeout(() => {
+            if (!userIsEditing()) paint();
+        }, 150);
+    });
 })();
