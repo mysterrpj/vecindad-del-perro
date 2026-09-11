@@ -6,3 +6,4 @@ config.js
 .env.*
 functions/.env
 functions/.env.*
+*.log

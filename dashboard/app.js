@@ -3,15 +3,65 @@
     const protectedPages = !document.body.classList.contains('auth-page');
     const PAYMENT_HOLD_MINUTES = 30;
 
+    const navigationGroups = {
+        resumen: 'inicio',
+        hoy: 'inicio',
+        clientes: 'clientes',
+        mensajes: 'clientes',
+        reclamos: 'clientes',
+        pagos: 'finanzas',
+        reportes: 'finanzas'
+    };
+
+    const sectionNavigation = {
+        inicio: [
+            { page: 'hoy', href: 'hoy.html', label: 'Hoy' },
+            { page: 'resumen', href: 'index.html', label: 'Resumen' }
+        ],
+        clientes: [
+            { page: 'clientes', href: 'clientes.html', label: 'Clientes' },
+            { page: 'mensajes', href: 'mensajes.html', label: 'Mensajes' },
+            { page: 'reclamos', href: 'reclamos.html', label: 'Reclamos' }
+        ],
+        finanzas: [
+            { page: 'pagos', href: 'pagos.html', label: 'Pagos' },
+            { page: 'reportes', href: 'reportes.html', label: 'Reportes' }
+        ]
+    };
+
+    function sectionTabs(section) {
+        const tabs = sectionNavigation[section] || [];
+        if (!tabs.length) return '';
+        return `<nav class="section-tabs" aria-label="Secciones de ${section}">${tabs.map((tab) => `
+            <a href="${tab.href}" class="${tab.page === page ? 'active' : ''}" ${tab.page === page ? 'aria-current="page"' : ''}>${tab.label}</a>
+        `).join('')}</nav>`;
+    }
+
+    function setActiveNav() {
+        const nav = document.querySelector('.nav');
+        if (!nav) return;
+        nav.innerHTML = `
+            <a href="hoy.html" data-nav="inicio">Inicio</a>
+            <a href="reservas.html" data-nav="reservas">Reservas</a>
+            <a href="clientes.html" data-nav="clientes">Clientes</a>
+            <a href="pagos.html" data-nav="finanzas">Finanzas</a>
+            <a href="servicios.html" data-nav="servicios">Servicios</a>
+            <a href="configuracion.html" data-nav="configuracion">Configuracion</a>
+        `;
+        const activeSection = navigationGroups[page] || page;
+        document.querySelectorAll('.nav a').forEach((link) => {
+            if (link.dataset.nav === activeSection) link.classList.add('active');
+        });
+    }
+
+    // Se aplica de inmediato, antes de inicializar Firebase, para evitar el parpadeo al navegar.
+    setActiveNav();
+
     await window.BusinessStore.ready;
 
     const firebaseEnabled = window.BusinessStore.isFirebaseEnabled();
-    const pin = window.CONFIG?.DASHBOARD_PIN || window.BusinessStore?.read().settings.dashboardPin || '1234';
-
     if (protectedPages) {
-        const hasAccess = firebaseEnabled
-            ? Boolean(window.BusinessStore.getUser()) || sessionStorage.getItem('lvdperro_admin') === 'ok'
-            : sessionStorage.getItem('lvdperro_admin') === 'ok';
+        const hasAccess = firebaseEnabled && Boolean(window.BusinessStore.getUser());
         if (!hasAccess) {
             location.href = 'login.html';
             return;
@@ -300,11 +350,6 @@
         `;
     }
 
-    function setActiveNav() {
-        document.querySelectorAll('.nav a').forEach((link) => {
-            if (link.dataset.nav === page) link.classList.add('active');
-        });
-    }
 
     function renderSummary() {
         const store = data();
@@ -316,6 +361,7 @@
             .reduce((sum, item) => sum + Number(item.amount || 0), 0);
 
         document.getElementById('content').innerHTML = `
+            ${sectionTabs('inicio')}
             <div class="grid">
                 ${metric('Reservas activas', pendingReservations.length, '📅')}
                 ${metric('Clientes', store.customers.length, '👤')}
@@ -353,6 +399,7 @@
         const estimatedIncome = activeReservations.reduce((sum, item) => sum + Number(item.amount || item.price || 0), 0);
 
         document.getElementById('content').innerHTML = `
+            ${sectionTabs('inicio')}
             <div class="toolbar">
                 <input class="input compact-date" id="todayDate" type="date" value="${selectedDate}">
                 <a class="btn" href="reservas.html">Ver agenda</a>
@@ -693,6 +740,7 @@
             { label: 'Acciones', render: (item) => `<button class="btn compact" data-customer-profile="${item.id}" type="button">Historial</button>` }
         ];
         document.getElementById('content').innerHTML = `
+            ${sectionTabs('clientes')}
             <div class="toolbar"><input class="input" id="search" placeholder="Buscar cliente o mascota"></div>
             <div id="table">${rows(store.customers, customerColumns)}</div>
         `;
@@ -797,6 +845,7 @@
     function renderPayments() {
         const store = data();
         document.getElementById('content').innerHTML = `
+            ${sectionTabs('finanzas')}
             <div class="toolbar"><input class="input" id="search" placeholder="Buscar pago"></div>
             <div id="table">${rows(store.payments, paymentColumns())}</div>
         `;
@@ -805,13 +854,13 @@
 
     function renderClaims() {
         const store = data();
-        document.getElementById('content').innerHTML = rows(store.claims, [
+        document.getElementById('content').innerHTML = `${sectionTabs('clientes')}${rows(store.claims, [
             { label: 'Consumidor', render: (item) => `<strong>${item.name}</strong><div class="muted">${item.dni} · ${item.phone}</div>` },
             { label: 'Tipo', render: (item) => item.type },
             { label: 'Detalle', render: (item) => `<strong>${item.detail}</strong><div class="muted">${item.order}</div>` },
             { label: 'Estado', render: (item) => `<span class="pill ${statusClass(item.status)}">${item.status}</span>` },
             { label: 'Acciones', render: (item) => actionSelect('claims', item.id, item.status, ['Abierto', 'En revision', 'Cerrado']) }
-        ]);
+        ])}`;
     }
 
     function reportList(items) {
@@ -866,6 +915,7 @@
         const monthReservations = reservationsInRange(monthStart, nextMonth);
 
         document.getElementById('content').innerHTML = `
+            ${sectionTabs('finanzas')}
             <div class="grid reports-metrics">
                 ${metric('Ventas hoy', money(paidInRange(today, tomorrow)), 'S/')}
                 ${metric('Ventas semana', money(paidInRange(weekStart, nextWeek)), 'S/')}
@@ -931,29 +981,148 @@
     function renderServices() {
         const store = data();
         document.getElementById('content').innerHTML = `
-            <section class="card">
-                <h2>Catalogo de servicios</h2>
-                ${rows(store.services, [
-                    { label: 'Servicio', render: (item) => `<strong>${item.name}</strong><div class="muted">${item.id}</div>` },
-                    { label: 'Precio', render: (item) => money(item.price) },
-                    { label: 'Duracion', render: (item) => `${item.duration} min` },
-                    { label: 'Estado', render: (item) => `<span class="pill ${item.active ? 'ok' : 'bad'}">${item.active ? 'Activo' : 'Inactivo'}</span>` }
-                ])}
+            <section class="services-catalog">
+                <header class="services-catalog-head">
+                    <div>
+                        <h2>Catalogo de servicios</h2>
+                        <p>${store.services.filter((item) => item.active).length} activos de ${store.services.length} servicios</p>
+                    </div>
+                    <button type="button" class="btn primary" id="newService">+ Nuevo servicio</button>
+                </header>
+                <div class="services-tools">
+                    <div class="service-filters" aria-label="Filtrar servicios">
+                        <button type="button" class="service-filter is-active" data-service-filter="all" aria-pressed="true">Todos</button>
+                        <button type="button" class="service-filter" data-service-filter="active" aria-pressed="false">Activos</button>
+                        <button type="button" class="service-filter" data-service-filter="inactive" aria-pressed="false">Inactivos</button>
+                    </div>
+                    <input class="input service-search" id="serviceSearch" type="search" placeholder="Buscar servicio">
+                </div>
+                <div class="service-list" id="serviceList">
+                    ${store.services.length ? store.services.map((item) => `
+                        <article class="service-row" data-service-id="${item.id}" data-active="${item.active ? 'true' : 'false'}" data-search="${`${item.name} ${item.id}`.toLowerCase()}">
+                            <div class="service-identity"><strong>${item.name}</strong><span>${item.id}</span></div>
+                            <div class="service-data service-price"><span>Precio</span><strong>${money(item.price)}</strong></div>
+                            <div class="service-data"><span>Duracion</span><strong>${item.duration} min</strong></div>
+                            <div><span class="pill ${item.active ? 'ok' : 'bad'}">${item.active ? 'Activo' : 'Inactivo'}</span></div>
+                            <button type="button" class="btn service-edit" data-service-id="${item.id}">Editar</button>
+                        </article>
+                    `).join('') : '<div class="empty">Aun no hay servicios registrados.</div>'}
+                    <div class="service-no-results" id="serviceNoResults" hidden>No encontramos servicios con esos filtros.</div>
+                </div>
             </section>
-            <section class="card" style="margin-top: 16px;">
-                <h2>Agregar o actualizar servicio</h2>
-                <form id="serviceForm" class="form-grid" style="margin-top: 16px;">
-                    <input class="input" name="id" placeholder="ID corto: bano-premium" required>
-                    <input class="input" name="name" placeholder="Nombre del servicio" required>
-                    <input class="input" name="price" type="number" min="0" step="1" placeholder="Precio S/" required>
-                    <input class="input" name="duration" type="number" min="0" step="5" placeholder="Duracion min" required>
-                    <label class="muted"><input name="active" type="checkbox" checked> Activo para WhatsApp</label>
-                    <button class="btn primary" type="submit">Guardar servicio</button>
-                </form>
-                <p class="muted">El bot de WhatsApp lee servicios activos desde Firebase. Usa IDs sin espacios ni tildes.</p>
-            </section>
+            <div class="service-modal-backdrop" id="serviceModal" hidden>
+                <section class="service-modal" role="dialog" aria-modal="true" aria-labelledby="serviceModalTitle">
+                    <header class="service-modal-head">
+                        <div><h2 id="serviceModalTitle">Nuevo servicio</h2><p id="serviceModalHelp">Agrega un servicio al catalogo de reservas.</p></div>
+                        <button type="button" class="btn service-modal-close" id="serviceModalClose" aria-label="Cerrar">Cerrar</button>
+                    </header>
+                    <form id="serviceForm" class="form-grid">
+                        <div class="service-field"><label for="serviceId">ID corto</label><input class="input" id="serviceId" name="id" placeholder="bano-premium" required></div>
+                        <div class="service-field"><label for="serviceName">Nombre</label><input class="input" id="serviceName" name="name" placeholder="Nombre del servicio" required></div>
+                        <div class="service-field"><label for="servicePrice">Precio S/</label><input class="input" id="servicePrice" name="price" type="number" min="0" step="1" required></div>
+                        <div class="service-field"><label for="serviceDuration">Duracion en minutos</label><input class="input" id="serviceDuration" name="duration" type="number" min="0" step="5" required></div>
+                        <label class="service-active"><input name="active" type="checkbox" checked> Disponible para WhatsApp</label>
+                        <div class="service-modal-actions full">
+                            <button class="btn" id="serviceCancelEdit" type="button">Cancelar</button>
+                            <button class="btn primary" type="submit">Guardar servicio</button>
+                        </div>
+                    </form>
+                </section>
+            </div>
         `;
-        document.getElementById('serviceForm')?.addEventListener('submit', (event) => {
+        const serviceForm = document.getElementById('serviceForm');
+        const idField = serviceForm?.elements.namedItem('id');
+        const nameField = serviceForm?.elements.namedItem('name');
+        const priceField = serviceForm?.elements.namedItem('price');
+        const durationField = serviceForm?.elements.namedItem('duration');
+        const activeField = serviceForm?.elements.namedItem('active');
+        const serviceModal = document.getElementById('serviceModal');
+        const cancelEditButton = document.getElementById('serviceCancelEdit');
+        const modalCloseButton = document.getElementById('serviceModalClose');
+        const modalTitle = document.getElementById('serviceModalTitle');
+        const modalHelp = document.getElementById('serviceModalHelp');
+        let editingId = null;
+
+        const resetServiceForm = () => {
+            serviceForm?.reset();
+            if (idField) idField.readOnly = false;
+            const submitButton = serviceForm?.querySelector('button[type="submit"]');
+            if (submitButton) submitButton.textContent = 'Guardar servicio';
+            if (modalTitle) modalTitle.textContent = 'Nuevo servicio';
+            if (modalHelp) modalHelp.textContent = 'Agrega un servicio al catalogo de reservas.';
+            editingId = null;
+        };
+
+        const closeServiceModal = () => {
+            if (serviceModal) serviceModal.hidden = true;
+            resetServiceForm();
+        };
+
+        const openServiceModal = (service) => {
+            if (!serviceForm || !serviceModal) return;
+            resetServiceForm();
+            if (service) {
+                editingId = service.id;
+                idField.value = service.id;
+                idField.readOnly = true;
+                nameField.value = service.name || '';
+                priceField.value = Number(service.price || 0);
+                durationField.value = Number(service.duration || 0);
+                activeField.checked = service.active !== false;
+                serviceForm.querySelector('button[type="submit"]').textContent = 'Actualizar servicio';
+                modalTitle.textContent = 'Editar servicio';
+                modalHelp.textContent = 'El ID se bloquea para evitar servicios duplicados.';
+            }
+            serviceModal.hidden = false;
+            (service ? priceField : idField).focus();
+        };
+
+        document.getElementById('newService')?.addEventListener('click', () => openServiceModal());
+
+        document.querySelectorAll('.service-edit').forEach((button) => {
+            button.addEventListener('click', () => {
+                const serviceId = button.dataset.serviceId;
+                const service = data().services.find((item) => item.id === serviceId);
+                if (service) openServiceModal(service);
+            });
+        });
+
+        cancelEditButton?.addEventListener('click', closeServiceModal);
+        modalCloseButton?.addEventListener('click', closeServiceModal);
+        serviceModal?.addEventListener('click', (event) => {
+            if (event.target === serviceModal) closeServiceModal();
+        });
+
+        let currentFilter = 'all';
+        const serviceSearch = document.getElementById('serviceSearch');
+        const serviceRows = [...document.querySelectorAll('.service-row')];
+        const serviceNoResults = document.getElementById('serviceNoResults');
+        const filterServices = () => {
+            const query = String(serviceSearch?.value || '').trim().toLowerCase();
+            let visible = 0;
+            serviceRows.forEach((row) => {
+                const matchesFilter = currentFilter === 'all' || row.dataset.active === String(currentFilter === 'active');
+                const matchesQuery = !query || row.dataset.search.includes(query);
+                row.hidden = !(matchesFilter && matchesQuery);
+                if (!row.hidden) visible += 1;
+            });
+            if (serviceNoResults) serviceNoResults.hidden = visible > 0 || !serviceRows.length;
+        };
+
+        serviceSearch?.addEventListener('input', filterServices);
+        document.querySelectorAll('.service-filter').forEach((button) => {
+            button.addEventListener('click', () => {
+                currentFilter = button.dataset.serviceFilter || 'all';
+                document.querySelectorAll('.service-filter').forEach((filterButton) => {
+                    const selected = filterButton === button;
+                    filterButton.classList.toggle('is-active', selected);
+                    filterButton.setAttribute('aria-pressed', String(selected));
+                });
+                filterServices();
+            });
+        });
+
+        serviceForm?.addEventListener('submit', (event) => {
             event.preventDefault();
             const form = new FormData(event.currentTarget);
             const service = {
@@ -966,11 +1135,11 @@
             if (!service.id || !service.name) return;
             const next = data();
             const exists = next.services.some((item) => item.id === service.id);
+            if (!exists && !editingId && !window.confirm(`El ID "${service.id}" no existe. Se creara un servicio nuevo. Continuar?`)) return;
             next.services = exists
                 ? next.services.map((item) => item.id === service.id ? service : item)
                 : [service, ...next.services];
             window.BusinessStore.write(next);
-            alert('Servicio guardado. El bot lo usara en la proxima conversacion.');
             renderServices();
         });
     }
@@ -984,12 +1153,12 @@
             content: `Reserva solicitada para ${item.petName}: ${item.service}`,
             createdAt: item.createdAt
         }));
-        document.getElementById('content').innerHTML = rows(leads, [
+        document.getElementById('content').innerHTML = `${sectionTabs('clientes')}${rows(leads, [
             { label: 'Contacto', render: (item) => `<strong>${item.name}</strong><div class="muted">${item.phone}</div>` },
             { label: 'Mensaje', render: (item) => item.content },
             { label: 'Fecha', render: (item) => date(item.createdAt) },
             { label: 'WhatsApp', render: (item) => `<a class="btn" href="https://wa.me/51${String(item.phone).replace(/\D/g, '').slice(-9)}" target="_blank">Abrir</a>` }
-        ]);
+        ])}`;
     }
 
     function renderSettings() {
@@ -1011,7 +1180,6 @@
                     <input class="input" name="whatsapp" value="${store.settings.whatsapp}" placeholder="WhatsApp con codigo pais">
                     <input class="input" name="hours" value="${store.settings.hours}" placeholder="Horario">
                     <input class="input full" name="address" value="${store.settings.address}" placeholder="Direccion">
-                    <input class="input" name="dashboardPin" value="${store.settings.dashboardPin}" placeholder="PIN dashboard">
                     <button class="btn primary" type="submit">Guardar</button>
                 </form>
             </section>
@@ -1075,49 +1243,72 @@
     });
 
     if (page === 'login') {
-        const pinField = document.getElementById('pin');
         const emailField = document.getElementById('email');
         const passwordField = document.getElementById('password');
+        const forgotPassword = document.getElementById('forgotPassword');
         const loginHelp = document.getElementById('loginHelp');
+        const feedback = document.getElementById('loginError');
 
-        if (firebaseEnabled) {
-            pinField.required = false;
-            pinField.placeholder = 'PIN temporal fallback';
-            loginHelp.textContent = 'Usa Firebase Auth si ya esta activo. Mientras tanto puedes entrar con el PIN temporal.';
-        }
+        const showFeedback = (message, success = false) => {
+            feedback.textContent = message;
+            feedback.style.color = success ? '#86efac' : '#fca5a5';
+        };
+
+        const authErrorMessage = (authError, fallback) => {
+            const code = authError?.code || '';
+            if (code === 'auth/invalid-credential' || code === 'auth/wrong-password' || code === 'auth/user-not-found') {
+                return 'El correo o la contraseña no son correctos.';
+            }
+            if (code === 'auth/invalid-email') return 'Ingresa un correo válido.';
+            if (code === 'auth/too-many-requests') return 'Hubo demasiados intentos. Espera unos minutos y vuelve a intentarlo.';
+            if (code === 'auth/network-request-failed') return 'No se pudo conectar. Revisa tu internet e inténtalo nuevamente.';
+            return fallback;
+        };
+
+        loginHelp.textContent = firebaseEnabled
+            ? 'Ingresa con tu usuario de Firebase Auth.'
+            : 'Firebase Auth no está disponible. Contacta al administrador.';
 
         document.getElementById('loginForm').addEventListener('submit', async (event) => {
             event.preventDefault();
-            const error = document.getElementById('loginError');
-            error.textContent = '';
+            showFeedback('');
 
             try {
-                if (firebaseEnabled) {
-                    if (pinField.value === pin) {
-                        sessionStorage.setItem('lvdperro_admin', 'ok');
-                        location.href = 'index.html';
-                        return;
-                    }
-
-                    if (!emailField.value || !passwordField.value) {
-                        error.textContent = 'Ingresa correo y contraseña, o usa el PIN temporal.';
-                        return;
-                    }
-
-                    await window.BusinessStore.signIn(emailField.value, passwordField.value);
-                    location.href = 'index.html';
+                if (!firebaseEnabled) {
+                    showFeedback('Firebase Auth no está disponible. Contacta al administrador.');
                     return;
                 }
 
-                const value = pinField.value;
-                if (value === pin) {
-                    sessionStorage.setItem('lvdperro_admin', 'ok');
-                    location.href = 'index.html';
-                } else {
-                    error.textContent = 'PIN incorrecto.';
+                if (!emailField.value || !passwordField.value) {
+                    showFeedback('Ingresa correo y contraseña.');
+                    return;
                 }
+
+                await window.BusinessStore.signIn(emailField.value, passwordField.value);
+                location.href = 'index.html';
             } catch (loginError) {
-                error.textContent = loginError.message || 'No se pudo iniciar sesion.';
+                showFeedback(authErrorMessage(loginError, 'No se pudo iniciar sesión.'));
+            }
+        });
+
+        forgotPassword.addEventListener('click', async () => {
+            const email = emailField.value.trim();
+            showFeedback('');
+
+            if (!email) {
+                showFeedback('Escribe tu correo y luego pulsa “¿Olvidaste tu contraseña?”.');
+                emailField.focus();
+                return;
+            }
+
+            forgotPassword.disabled = true;
+            try {
+                await window.BusinessStore.resetPassword(email);
+                showFeedback('Te enviamos un correo para restablecer tu contraseña. Revisa también la carpeta de spam.', true);
+            } catch (resetError) {
+                showFeedback(authErrorMessage(resetError, 'No se pudo enviar el correo de recuperación.'));
+            } finally {
+                forgotPassword.disabled = false;
             }
         });
         return;

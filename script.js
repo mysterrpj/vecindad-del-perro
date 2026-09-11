@@ -65,7 +65,7 @@ contactForm?.addEventListener('submit', function (e) {
 
     window.BusinessStore?.createReservation(formData);
 
-    const whatsappNumber = window.CONFIG?.WHATSAPP_NUMBER || '51970716064';
+    const whatsappNumber = window.CONFIG?.WHATSAPP_NUMBER || '51991845638';
     const whatsappText = [
         'Hola, quiero coordinar una cita para mi mascota.',
         `Nombre: ${formData.name}`,

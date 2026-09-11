@@ -14,6 +14,7 @@
       ".firebaserc",
       ".gitignore",
       "firebase-debug.log",
+      "*.log",
       "functions",
       "functions/**",
       "*.md",
@@ -22,6 +23,8 @@
       ".git/**",
       ".firebase",
       ".firebase/**",
+      ".interface-design",
+      ".interface-design/**",
       ".agent",
       ".agent/**",
       "**/node_modules/**",
@@ -29,6 +32,26 @@
       "**/.firebase/**",
       "**/.agent/**",
       "**/.*"
+    ],
+    "headers": [
+      {
+        "source": "**/*.html",
+        "headers": [
+          { "key": "Cache-Control", "value": "no-cache, must-revalidate" }
+        ]
+      },
+      {
+        "source": "**/*.js",
+        "headers": [
+          { "key": "Cache-Control", "value": "no-cache, must-revalidate" }
+        ]
+      },
+      {
+        "source": "**/*.css",
+        "headers": [
+          { "key": "Cache-Control", "value": "no-cache, must-revalidate" }
+        ]
+      }
     ]
   }
 }

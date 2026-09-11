@@ -113,7 +113,7 @@ class VoiceClient {
                         1. SERVICIOS Y PRECIOS:
                            - Baño Completo: S/ 20 (incluye shampoo premium, secado y cepillado)
                            - Corte de Pelo: S/ 25 (según raza o estilo personalizado)
-                           - Grooming Completo: S/ 40 (baño + corte + limpieza de oídos y uñas)
+                           - Baño y Corte Completo: S/ 40 (baño + corte + limpieza de oídos y uñas)
                            - Spa Relax: S/ 50 (tratamiento de aromaterapia y masajes)
                            - Limpieza Dental: S/ 20
                            
@@ -124,7 +124,7 @@ class VoiceClient {
                            - Estamos en Mz P1 Lote 26, Montenegro, San Juan de Lurigancho.
                            
                         4. CONTACTO:
-                           - Para agendar citas, escríbenos al WhatsApp: 970 716 064
+                           - Para agendar citas, escríbenos al WhatsApp: 991 845 638
                            
                         TU OBJETIVO:
                         - Si preguntan precios: Explica las opciones con entusiasmo.

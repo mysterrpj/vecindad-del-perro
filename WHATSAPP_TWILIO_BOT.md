@@ -1,5 +1,12 @@
 # Bot WhatsApp con Twilio
 
+
+## Numero Twilio adquirido (aun no implementado)
+
+Numero adquirido para Twilio: **970 716 064** (formato internacional +51 970 716 064 / `51970716064`).
+Estado: adquirido, NO implementado todavia. NO usar este numero como WhatsApp del negocio en la web.
+WhatsApp actual del spa: **991 845 638** (formato internacional +51 991 845 638 / `51991845638`).
+Cuando se implemente Twilio, confirmar en la consola que este numero este aprobado como WhatsApp sender antes de configurarlo en `TWILIO_WHATSAPP_FROM`.
 ## Estado Actual
 
 Ya existe una Firebase Function llamada `twilioWebhook`.

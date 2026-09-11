@@ -13,7 +13,7 @@ const culqiSecretKey = defineSecret('CULQI_SECRET_KEY');
 
 const SERVICES = [
   { id: 'bano', name: 'Bano Completo', price: 35, duration: 90 },
-  { id: 'grooming', name: 'Grooming Completo', price: 55, duration: 120 },
+  { id: 'grooming', name: 'Baño y Corte Completo', price: 55, duration: 120 },
   { id: 'indumentaria', name: 'Indumentaria', price: 20, duration: 30 },
   { id: 'spa', name: 'Spa Relax', price: 65, duration: 120 },
   { id: 'dental', name: 'Higiene Dental', price: 25, duration: 45 },
@@ -22,8 +22,8 @@ const SERVICES = [
 
 const DEFAULT_SETTINGS = {
   businessName: 'La Vecindad del Perro',
-  phone: '970 716 064',
-  whatsapp: '51970716064',
+  phone: '991 845 638',
+  whatsapp: '51991845638',
   address: 'Mz P1 Lote 26, Montenegro, SJL',
   hours: '7:00 AM - 8:00 PM'
 };

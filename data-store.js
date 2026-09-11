@@ -4,7 +4,7 @@
 
     const defaultServices = [
         { id: 'bano', name: 'Baño Completo', price: 35, duration: 90, active: true },
-        { id: 'grooming', name: 'Grooming Completo', price: 55, duration: 120, active: true },
+        { id: 'grooming', name: 'Baño y Corte Completo', price: 55, duration: 120, active: true },
         { id: 'indumentaria', name: 'Indumentaria', price: 20, duration: 30, active: true },
         { id: 'spa', name: 'Spa Relax', price: 65, duration: 120, active: true },
         { id: 'dental', name: 'Higiene Dental', price: 25, duration: 45, active: true },
@@ -20,11 +20,10 @@
         services: defaultServices,
         settings: {
             businessName: 'La Vecindad del Perro',
-            phone: '970 716 064',
-            whatsapp: '51970716064',
+            phone: '991 845 638',
+            whatsapp: '51991845638',
             address: 'Mz P1 Lote 26, Montenegro, SJL',
-            hours: '7:00 AM - 8:00 PM',
-            dashboardPin: '1234'
+            hours: '7:00 AM - 8:00 PM'
         }
     };
 
@@ -343,16 +342,22 @@
         return credential.user;
     }
 
+    async function resetPassword(email) {
+        if (!firebaseState.enabled || firebaseState.error) {
+            throw new Error('Firebase Auth no esta configurado.');
+        }
+        const { sendPasswordResetEmail } = firebaseState.api;
+        await sendPasswordResetEmail(firebaseState.auth, email);
+    }
     async function signOut() {
         if (canUseCloud()) {
             await firebaseState.api.signOut(firebaseState.auth);
         }
         firebaseState.user = null;
-        sessionStorage.removeItem('lvdperro_admin');
     }
 
     function isFirebaseEnabled() {
-        return Boolean(window.CONFIG?.FIREBASE_CONFIG?.apiKey);
+        return Boolean(firebaseState.enabled && firebaseState.auth && firebaseState.api && !firebaseState.error);
     }
 
     function getUser() {
@@ -375,6 +380,7 @@
         updateCollection,
         removeFromCollection,
         signIn,
+        resetPassword,
         signOut,
         isFirebaseEnabled,
         getUser,

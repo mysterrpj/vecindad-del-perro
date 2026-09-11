@@ -1641,7 +1641,7 @@ img {
         top: 80px;
         left: 0;
         right: 0;
-        background: white;
+        background: var(--bg-card);
         flex-direction: column;
         padding: 20px;
         gap: 16px;
