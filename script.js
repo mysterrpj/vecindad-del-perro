@@ -1,3 +1,6 @@
+// Panel de control del negocio: numero de WhatsApp e interruptores (ver ajustes.js)
+const AJUSTES = window.AJUSTES || {};
+
 // Mobile Navigation Toggle
 const navToggle = document.getElementById('navToggle');
 const navMenu = document.querySelector('.nav-menu');
@@ -65,7 +68,7 @@ contactForm?.addEventListener('submit', function (e) {
 
     window.BusinessStore?.createReservation(formData);
 
-    const whatsappNumber = window.CONFIG?.WHATSAPP_NUMBER || '51991845638';
+    const whatsappNumber = AJUSTES.whatsapp || window.CONFIG?.WHATSAPP_NUMBER || '51991845638';
     const whatsappText = [
         'Hola, quiero coordinar una cita para mi mascota.',
         `Nombre: ${formData.name}`,
@@ -232,9 +235,9 @@ window.addEventListener('scroll', () => {
 
 // --- CULQI INTEGRATION & CART LOGIC ---
 
-// Configuration for Culqi (Test Key)
-const ONLINE_PAYMENTS_ENABLED = false;
-const CULQI_PUBLIC_KEY = window.CONFIG?.CULQI_PUBLIC_KEY || 'pk_test_ed8f4c7d0d0c4d7e'; // Reservado para cuando se reactive Culqi
+// Cobros con tarjeta: se encienden desde ajustes.js (cobrosConTarjeta)
+const ONLINE_PAYMENTS_ENABLED = Boolean(AJUSTES.cobrosConTarjeta);
+const CULQI_PUBLIC_KEY = window.CONFIG?.CULQI_PUBLIC_KEY || '';
 
 let currentCart = {
     service: "",
@@ -346,6 +349,14 @@ function initCulqi() {
 if (ONLINE_PAYMENTS_ENABLED && (document.querySelector('.btn-pay') || btnCheckout)) {
     initCulqi();
 }
+
+// Con los cobros encendidos, los botones "Pagar" vuelven a mostrarse.
+if (ONLINE_PAYMENTS_ENABLED) {
+    document.querySelectorAll('.btn-pay').forEach((boton) => { boton.hidden = false; });
+}
+
+// El numero del negocio y los enlaces de WhatsApp se aplican desde ajustes.js
+
 
 // Checkout Button logic
 btnCheckout?.addEventListener('click', () => {

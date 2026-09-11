@@ -20,8 +20,8 @@
         services: defaultServices,
         settings: {
             businessName: 'La Vecindad del Perro',
-            phone: '991 845 638',
-            whatsapp: '51991845638',
+            phone: (window.AJUSTES && window.AJUSTES.telefonoVisible) || '991 845 638',
+            whatsapp: (window.AJUSTES && window.AJUSTES.whatsapp) || '51991845638',
             address: 'Mz P1 Lote 26, Montenegro, SJL',
             hours: '7:00 AM - 8:00 PM'
         }

@@ -1,5 +1,22 @@
 # Bot WhatsApp con Twilio
 
+## Estado actual: APAGADO
+
+El bot esta implementado, pero desactivado. Mientras este asi, la web solo usa
+el WhatsApp del negocio con el boton "escribenos por WhatsApp" y responde una
+persona. No se envia ni se procesa nada automaticamente.
+
+Los datos del negocio (numero de WhatsApp y los dos interruptores) se editan en
+`ajustes.js`, en la raiz del proyecto. No hace falta tocar codigo.
+
+Para encender el bot mas adelante:
+1. Confirmar el numero del negocio en `ajustes.js`.
+2. Publicar las functions con la variable `BOT_ENABLED=true`.
+3. Configurar las credenciales de Twilio (ver mas abajo).
+
+Si `BOT_ENABLED` no es `true`, el webhook responde un mensaje neutral y no
+procesa el mensaje. Asi no se puede encender por accidente.
+
 
 ## Numero Twilio adquirido (aun no implementado)
 

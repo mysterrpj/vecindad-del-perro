@@ -1174,6 +1174,7 @@
             </section>
             <section class="card">
                 <h2>Configuracion del negocio</h2>
+                <p class="muted">El numero que ven tus clientes en la web (botones y enlaces de WhatsApp) se cambia en el archivo <strong>ajustes.js</strong>. Los datos de aqui los usan las notificaciones y el bot.</p>
                 <form id="settingsForm" class="form-grid" style="margin-top: 16px;">
                     <input class="input" name="businessName" value="${store.settings.businessName}" placeholder="Negocio">
                     <input class="input" name="phone" value="${store.settings.phone}" placeholder="Telefono">

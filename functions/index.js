@@ -28,6 +28,11 @@ const DEFAULT_SETTINGS = {
   hours: '7:00 AM - 8:00 PM'
 };
 
+// Interruptor del bot de WhatsApp (Twilio).
+// Se enciende con la variable de entorno BOT_ENABLED=true al publicar las functions.
+// Por defecto queda APAGADO: el bot no responde hasta que se active a proposito.
+const BOT_ENABLED = /^(1|true|si|sí)$/i.test(String(process.env.BOT_ENABLED || '').trim());
+
 const INITIAL_STEP = 'ask_name';
 const TIME_ZONE = 'America/Lima';
 const PAYMENT_HOLD_MINUTES = 30;
@@ -805,6 +810,12 @@ async function handleMessage(phone, incoming, current) {
 exports.twilioWebhook = onRequest({ region: 'us-central1' }, async (req, res) => {
   if (req.method !== 'POST') {
     res.status(405).send('Method Not Allowed');
+    return;
+  }
+
+  if (!BOT_ENABLED) {
+    res.set('Content-Type', 'text/xml; charset=utf-8');
+    res.status(200).send(twiml('Por ahora este numero no tiene asistente automatico. Escribenos y te atendemos personalmente.'));
     return;
   }
 

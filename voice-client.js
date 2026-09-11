@@ -124,7 +124,7 @@ class VoiceClient {
                            - Estamos en Mz P1 Lote 26, Montenegro, San Juan de Lurigancho.
                            
                         4. CONTACTO:
-                           - Para agendar citas, escríbenos al WhatsApp: 991 845 638
+                           - Para agendar citas, escríbenos al WhatsApp: ${window.AJUSTES?.telefonoVisible || '991 845 638'}
                            
                         TU OBJETIVO:
                         - Si preguntan precios: Explica las opciones con entusiasmo.
