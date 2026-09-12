@@ -259,6 +259,23 @@ p { color: var(--muted); }
     font-size: 13px;
 }
 
+.pay-balance {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #101010;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.pay-balance strong { color: var(--text); font-size: 15px; }
+
 .row-actions {
     display: flex;
     gap: 6px;

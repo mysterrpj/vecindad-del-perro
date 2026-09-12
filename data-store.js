@@ -288,15 +288,20 @@
 
     function createPayment(payload) {
         const store = read();
+        const esCulqi = Boolean(payload.token);
         const payment = {
             id: id('pay'),
             reservationId: payload.reservationId || '',
             customerName: payload.customerName || payload.name || 'Cliente web',
             service: payload.service || 'Servicio',
             amount: Number(payload.amount || 0),
-            method: payload.method || 'Culqi',
-            status: payload.status || 'Pendiente de backend',
-            tokenReceived: Boolean(payload.token),
+            total: Number(payload.total || payload.amount || 0),
+            kind: payload.kind || 'completo',
+            method: payload.method || (esCulqi ? 'Culqi' : 'Yape'),
+            status: payload.status || (esCulqi ? 'Pendiente de backend' : 'Pagado'),
+            reference: payload.reference || '',
+            paidAt: payload.paidAt || new Date().toISOString().slice(0, 10),
+            tokenReceived: esCulqi,
             tokenPreview: payload.token ? `${payload.token.slice(0, 8)}...` : '',
             createdAt: new Date().toISOString()
         };

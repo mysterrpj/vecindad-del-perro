@@ -268,6 +268,41 @@
         return /pagad|token/i.test(`${item.status || ''} ${item.paymentStatus || ''}`);
     }
 
+    const PAYMENT_METHODS = ['Yape', 'Plin', 'Transferencia', 'Efectivo', 'Tarjeta'];
+    const PAYMENT_STATUSES = ['Pagado', 'Por verificar', 'Reembolsado'];
+
+    function isPaidPayment(payment) {
+        return /pagad/i.test(payment.status || '');
+    }
+
+    function paymentsOfReservation(reservationId) {
+        return data().payments.filter((item) => item.reservationId && item.reservationId === reservationId);
+    }
+
+    function paidAmountOfReservation(reservationId) {
+        return paymentsOfReservation(reservationId)
+            .filter(isPaidPayment)
+            .reduce((sum, item) => sum + Number(item.amount || 0), 0);
+    }
+
+    function reservationTotal(reservation) {
+        const propio = Number(reservation?.amount || 0);
+        if (propio > 0) return propio;
+        const servicio = data().services.find((item) => item.id === reservation?.serviceId || item.name === reservation?.service);
+        return Number(servicio?.price || 0);
+    }
+
+    function reservationPaymentLabel(reservation) {
+        const total = reservationTotal(reservation);
+        const pagado = paidAmountOfReservation(reservation.id);
+        if (!total) return '';
+        if (!pagado) return `<div class="muted">Sin pagos · Total ${money(total)}</div>`;
+        const falta = Math.max(0, total - pagado);
+        return falta > 0
+            ? `<div class="muted">Pagado ${money(pagado)} · Falta ${money(falta)}</div>`
+            : `<div class="muted">Pagado ${money(pagado)} · Completo</div>`;
+    }
+
     function whatsappLink(phone) {
         const digits = String(phone || '').replace(/\D/g, '');
         if (!digits) return '';
@@ -447,6 +482,7 @@
                                     <div class="today-actions">
                                         ${actionSelect('reservations', item.id, item.status, ['Confirmada', 'En proceso', 'Terminada', 'Cancelada'])}
                                         <button class="btn compact" data-reschedule="${item.id}" type="button">Reprogramar</button>
+                        <button class="btn compact primary" data-pay-reservation="${item.id}" type="button">Registrar pago</button>
                                         ${contactLink ? `<a class="btn compact" href="${contactLink}" target="_blank" rel="noopener">WhatsApp</a>` : ''}
                                     </div>
                                 </article>
@@ -473,7 +509,7 @@
             { label: 'Cliente', render: (item) => `<strong>${item.name}</strong><div class="muted">${item.phone}</div>` },
             { label: 'Mascota', render: (item) => `${item.petName || '-'}<div class="muted">${item.service}</div>` },
             { label: 'Cita', render: (item) => `${item.scheduledSlot ? date(item.scheduledSlot) : (item.scheduledAt || 'Por confirmar')}<div class="muted">${item.duration ? `${item.duration} min` : ''}</div>` },
-            { label: 'Estado', render: (item) => `<span class="pill ${statusClass(reservationStatusLabel(item))}">${reservationStatusLabel(item)}</span><div class="muted">${paymentHoldLabel(item)}</div>` },
+            { label: 'Estado', render: (item) => `<span class="pill ${statusClass(reservationStatusLabel(item))}">${reservationStatusLabel(item)}</span><div class="muted">${paymentHoldLabel(item)}</div>${reservationPaymentLabel(item)}` },
             { label: 'Registro', render: (item) => date(item.createdAt) },
             ...(withActions ? [{
                 label: 'Acciones',
@@ -481,6 +517,7 @@
                     <div class="row-actions">
                         ${actionSelect('reservations', item.id, item.status, ['Nueva', 'Confirmada', 'En proceso', 'Terminada', 'Cancelada'])}
                         <button class="btn compact" data-reschedule="${item.id}" type="button">Reprogramar</button>
+                        <button class="btn compact primary" data-pay-reservation="${item.id}" type="button">Registrar pago</button>
                         ${deleteButton('reservations', item.id, 'reserva')}
                     </div>
                 `
@@ -492,13 +529,14 @@
         return [
             { label: 'Cliente', render: (item) => item.customerName || 'Cliente web' },
             { label: 'Servicio', render: (item) => item.service },
-            { label: 'Monto', render: (item) => money(item.amount) },
+            { label: 'Monto', render: (item) => `${money(item.amount)}${item.kind && item.kind !== 'completo' ? `<div class="muted">${item.kind === 'adelanto' ? 'Adelanto' : 'Saldo'}</div>` : ''}` },
+            { label: 'Fecha', render: (item) => item.paidAt || date(item.createdAt) },
             { label: 'Estado', render: (item) => `<span class="pill ${statusClass(item.status)}">${item.status}</span><div class="muted">${item.method}</div>` },
             ...(withActions ? [{
                 label: 'Acciones',
                 render: (item) => `
                     <div class="row-actions">
-                        ${actionSelect('payments', item.id, item.status, ['Pendiente de backend', 'Pagado', 'Reembolsado'])}
+                        ${actionSelect('payments', item.id, item.status, PAYMENT_STATUSES)}
                         ${deleteButton('payments', item.id, 'pago')}
                     </div>
                 `
@@ -544,7 +582,9 @@
             </div>
             ${occupancySummary(startOfDay(selectedDate))}
             <div id="reservationView">${selectedView === 'table' ? `<div id="table">${rows(filteredReservations, reservationColumns())}</div>` : calendarView(selectedView, selectedDate, '', selectedStatus)}</div>
+            ${paymentModalHtml()}
         `;
+        setupPaymentModal();
         if (selectedView === 'table') {
             bindSearch(filteredReservations, reservationColumns(), ['name', 'phone', 'petName', 'service']);
         } else {
@@ -862,14 +902,142 @@
         });
     }
 
+    function paymentModalHtml() {
+        const clientes = data().customers.map((item) => item.name).filter(Boolean);
+        return `
+            <div class="service-modal-backdrop" id="paymentModal" hidden>
+                <section class="service-modal" role="dialog" aria-modal="true" aria-labelledby="paymentModalTitle">
+                    <header class="service-modal-head">
+                        <div>
+                            <h2 id="paymentModalTitle">Registrar pago</h2>
+                            <p id="paymentModalHelp">Anota el pago que recibiste (Yape, Plin, transferencia o efectivo).</p>
+                        </div>
+                        <button type="button" class="btn service-modal-close" id="paymentModalClose" aria-label="Cerrar">Cerrar</button>
+                    </header>
+                    <form id="paymentForm" class="form-grid">
+                        <input type="hidden" name="reservationId">
+                        <div class="service-field"><label for="paymentCustomer">Cliente</label><input class="input" id="paymentCustomer" name="customerName" list="paymentCustomers" placeholder="Nombre del cliente" required></div>
+                        <div class="service-field"><label for="paymentService">Servicio</label><input class="input" id="paymentService" name="service" placeholder="Servicio" required></div>
+                        <div class="service-field"><label for="paymentTotal">Total del servicio S/</label><input class="input" id="paymentTotal" name="total" type="number" min="0" step="1" required></div>
+                        <div class="service-field"><label for="paymentAmount">Monto recibido S/</label><input class="input" id="paymentAmount" name="amount" type="number" min="0" step="1" required></div>
+                        <div class="service-field"><label for="paymentMethod">Metodo</label><select class="input" id="paymentMethod" name="method">${PAYMENT_METHODS.map((item) => `<option>${item}</option>`).join('')}</select></div>
+                        <div class="service-field"><label for="paymentStatus">Estado</label><select class="input" id="paymentStatus" name="status">${PAYMENT_STATUSES.map((item) => `<option>${item}</option>`).join('')}</select></div>
+                        <div class="service-field"><label for="paymentDate">Fecha del pago</label><input class="input" id="paymentDate" name="paidAt" type="date"></div>
+                        <div class="service-field"><label for="paymentReference">Nota o nro. de operacion</label><input class="input" id="paymentReference" name="reference" placeholder="Captura verificada"></div>
+                        <div class="pay-balance" id="paymentBalance"></div>
+                        <div class="service-modal-actions full">
+                            <button class="btn" id="paymentCancel" type="button">Cancelar</button>
+                            <button class="btn primary" type="submit">Guardar pago</button>
+                        </div>
+                        <datalist id="paymentCustomers">${clientes.map((nombre) => `<option value="${nombre}"></option>`).join('')}</datalist>
+                    </form>
+                </section>
+            </div>
+        `;
+    }
+
+    function updatePaymentBalance() {
+        const form = document.getElementById('paymentForm');
+        const box = document.getElementById('paymentBalance');
+        if (!form || !box) return;
+        const total = Number(form.elements.namedItem('total').value || 0);
+        const recibido = Number(form.elements.namedItem('amount').value || 0);
+        const previo = Number(form.dataset.pagadoPrevio || 0);
+        const falta = Math.max(0, total - previo - recibido);
+        box.innerHTML = `
+            <span>Total ${money(total)} · Ya pagado ${money(previo)} · Recibes ${money(recibido)}</span>
+            <strong>${falta > 0 ? `Falta ${money(falta)}` : 'Queda pagado'}</strong>
+        `;
+    }
+
+    function openPaymentModal(reservationId = '') {
+        const modal = document.getElementById('paymentModal');
+        const form = document.getElementById('paymentForm');
+        if (!modal || !form) return;
+
+        form.reset();
+        const reserva = reservationId ? data().reservations.find((item) => item.id === reservationId) : null;
+        const previo = reserva ? paidAmountOfReservation(reserva.id) : 0;
+        const total = reserva ? reservationTotal(reserva) : 0;
+
+        form.dataset.pagadoPrevio = String(previo);
+        form.elements.namedItem('reservationId').value = reserva ? reserva.id : '';
+        form.elements.namedItem('paidAt').value = new Date().toISOString().slice(0, 10);
+        form.elements.namedItem('status').value = 'Pagado';
+        form.elements.namedItem('method').value = 'Yape';
+
+        if (reserva) {
+            form.elements.namedItem('customerName').value = reserva.name || '';
+            form.elements.namedItem('service').value = reserva.service || '';
+            form.elements.namedItem('total').value = total || '';
+            form.elements.namedItem('amount').value = Math.max(0, total - previo) || '';
+        }
+
+        updatePaymentBalance();
+        modal.hidden = false;
+        form.elements.namedItem(reserva ? 'amount' : 'customerName').focus();
+    }
+
+    function setupPaymentModal() {
+        const modal = document.getElementById('paymentModal');
+        const form = document.getElementById('paymentForm');
+        if (!modal || !form) return;
+
+        form.elements.namedItem('total').addEventListener('input', updatePaymentBalance);
+        form.elements.namedItem('amount').addEventListener('input', updatePaymentBalance);
+
+        const cerrar = () => { modal.hidden = true; };
+        document.getElementById('paymentCancel')?.addEventListener('click', cerrar);
+        document.getElementById('paymentModalClose')?.addEventListener('click', cerrar);
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const datos = Object.fromEntries(new FormData(form));
+            const total = Number(datos.total || 0);
+            const amount = Number(datos.amount || 0);
+            const previo = Number(form.dataset.pagadoPrevio || 0);
+
+            if (amount <= 0) {
+                alert('Escribe el monto que recibiste.');
+                return;
+            }
+
+            const kind = previo > 0
+                ? (previo + amount >= total ? 'saldo' : 'adelanto')
+                : (total > 0 && amount < total ? 'adelanto' : 'completo');
+
+            window.BusinessStore.createPayment({
+                reservationId: datos.reservationId || '',
+                customerName: datos.customerName,
+                service: datos.service,
+                total,
+                amount,
+                kind,
+                method: datos.method,
+                status: datos.status,
+                reference: datos.reference,
+                paidAt: datos.paidAt
+            });
+
+            modal.hidden = true;
+            paint();
+        });
+    }
+
     function renderPayments() {
         const store = data();
         document.getElementById('content').innerHTML = `
             ${sectionTabs('finanzas')}
-            <div class="toolbar"><input class="input" id="search" placeholder="Buscar pago"></div>
+            <div class="toolbar">
+                <input class="input" id="search" placeholder="Buscar pago">
+                <button class="btn primary" id="newPayment" type="button">+ Registrar pago</button>
+            </div>
             <div id="table">${rows(store.payments, paymentColumns())}</div>
+            ${paymentModalHtml()}
         `;
-        bindSearch(store.payments, paymentColumns(), ['customerName', 'service', 'status', 'method']);
+        bindSearch(store.payments, paymentColumns(), ['customerName', 'service', 'status', 'method', 'reference']);
+        document.getElementById('newPayment')?.addEventListener('click', () => openPaymentModal());
+        setupPaymentModal();
     }
 
     function renderClaims() {
@@ -916,7 +1084,7 @@
         const nextMonth = addMonths(monthStart, 1);
         const paidPayments = store.payments.filter((item) => /pagado|token/i.test(item.status || ''));
         const paidInRange = (start, end) => paidPayments
-            .filter((item) => inDateRange(item.createdAt, start, end))
+            .filter((item) => inDateRange(item.paidAt || item.createdAt, start, end))
             .reduce((sum, item) => sum + Number(item.amount || 0), 0);
         const reservationsInRange = (start, end) => store.reservations
             .filter((item) => inDateRange(item.scheduledSlot || item.createdAt, start, end));
@@ -1251,6 +1419,12 @@
     });
 
     document.addEventListener('click', (event) => {
+        const pagoTarget = event.target.closest('[data-pay-reservation]');
+        if (pagoTarget) {
+            openPaymentModal(pagoTarget.dataset.payReservation);
+            return;
+        }
+
         const target = event.target.closest('[data-reschedule]');
         if (!target) return;
         renderRescheduleForm(target.dataset.reschedule);
