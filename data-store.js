@@ -337,10 +337,17 @@
         return store;
     }
 
-    function removeFromCollection(collectionName, itemId) {
+    async function removeFromCollection(collectionName, itemId) {
         const store = read();
         store[collectionName] = (store[collectionName] || []).filter((item) => item.id !== itemId);
         write(store, { skipCloud: true });
+
+        // Borra tambien el registro en Firestore, si hay sesion activa.
+        if (canUseCloud()) {
+            const { doc, deleteDoc } = firebaseState.api;
+            await deleteDoc(doc(firebaseState.db, collectionName, itemId));
+        }
+
         return store;
     }
 

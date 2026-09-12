@@ -478,8 +478,11 @@
             ...(withActions ? [{
                 label: 'Acciones',
                 render: (item) => `
-                    ${actionSelect('reservations', item.id, item.status, ['Nueva', 'Confirmada', 'En proceso', 'Terminada', 'Cancelada'])}
-                    <button class="btn compact" data-reschedule="${item.id}" type="button">Reprogramar</button>
+                    <div class="row-actions">
+                        ${actionSelect('reservations', item.id, item.status, ['Nueva', 'Confirmada', 'En proceso', 'Terminada', 'Cancelada'])}
+                        <button class="btn compact" data-reschedule="${item.id}" type="button">Reprogramar</button>
+                        ${deleteButton('reservations', item.id, 'reserva')}
+                    </div>
                 `
             }] : [])
         ];
@@ -491,8 +494,20 @@
             { label: 'Servicio', render: (item) => item.service },
             { label: 'Monto', render: (item) => money(item.amount) },
             { label: 'Estado', render: (item) => `<span class="pill ${statusClass(item.status)}">${item.status}</span><div class="muted">${item.method}</div>` },
-            ...(withActions ? [{ label: 'Acciones', render: (item) => actionSelect('payments', item.id, item.status, ['Pendiente de backend', 'Pagado', 'Reembolsado']) }] : [])
+            ...(withActions ? [{
+                label: 'Acciones',
+                render: (item) => `
+                    <div class="row-actions">
+                        ${actionSelect('payments', item.id, item.status, ['Pendiente de backend', 'Pagado', 'Reembolsado'])}
+                        ${deleteButton('payments', item.id, 'pago')}
+                    </div>
+                `
+            }] : [])
         ];
+    }
+
+    function deleteButton(collection, id, label) {
+        return `<button class="btn compact danger" data-delete="${collection}" data-id="${id}" data-label="${label}" type="button">Eliminar</button>`;
     }
 
     function actionSelect(collection, id, current, options) {
@@ -737,7 +752,12 @@
             { label: 'Visitas', render: (item) => customerReservations(item).length },
             { label: 'Pagos', render: (item) => money(customerPayments(item).reduce((sum, payment) => sum + Number(payment.amount || 0), 0)) },
             { label: 'Notas', render: (item) => item.notes || '-' },
-            { label: 'Acciones', render: (item) => `<button class="btn compact" data-customer-profile="${item.id}" type="button">Historial</button>` }
+            { label: 'Acciones', render: (item) => `
+                <div class="row-actions">
+                    <button class="btn compact" data-customer-profile="${item.id}" type="button">Historial</button>
+                    ${deleteButton('customers', item.id, 'cliente')}
+                </div>
+            ` }
         ];
         document.getElementById('content').innerHTML = `
             ${sectionTabs('clientes')}
@@ -859,7 +879,12 @@
             { label: 'Tipo', render: (item) => item.type },
             { label: 'Detalle', render: (item) => `<strong>${item.detail}</strong><div class="muted">${item.order}</div>` },
             { label: 'Estado', render: (item) => `<span class="pill ${statusClass(item.status)}">${item.status}</span>` },
-            { label: 'Acciones', render: (item) => actionSelect('claims', item.id, item.status, ['Abierto', 'En revision', 'Cerrado']) }
+            { label: 'Acciones', render: (item) => `
+                <div class="row-actions">
+                    ${actionSelect('claims', item.id, item.status, ['Abierto', 'En revision', 'Cerrado'])}
+                    ${deleteButton('claims', item.id, 'reclamo')}
+                </div>
+            ` }
         ])}`;
     }
 
@@ -1243,6 +1268,26 @@
         }
     });
 
+    document.addEventListener('click', async (event) => {
+        const boton = event.target.closest('[data-delete]');
+        if (!boton) return;
+
+        const coleccion = boton.dataset.delete;
+        const id = boton.dataset.id;
+        const etiqueta = boton.dataset.label || 'registro';
+
+        if (!window.confirm(`¿Seguro que quieres eliminar este ${etiqueta}? Esta accion no se puede deshacer.`)) return;
+
+        boton.disabled = true;
+        try {
+            await window.BusinessStore.removeFromCollection(coleccion, id);
+            paint();
+        } catch (error) {
+            boton.disabled = false;
+            window.alert('No se pudo eliminar el registro. Revisa tu conexion e intenta de nuevo.');
+        }
+    });
+
     if (page === 'login') {
         const emailField = document.getElementById('email');
         const passwordField = document.getElementById('password');
@@ -1364,9 +1409,18 @@
         renderers[page]?.();
     }
 
-    // Primera pintura con los datos ya guardados en el navegador: la seccion
-    // aparece al instante, sin esperar a que Firestore responda.
-    if (storeHasCachedData(data())) {
+    // La copia local solo se usa para pintar al instante cuando ya se sincronizo
+    // en esta misma sesion. Al abrir el panel por primera vez se espera a
+    // Firestore, para no mostrar registros viejos o de prueba.
+    const SESION_KEY = 'lvdperro_sesion_sincronizada';
+    let sesionSincronizada = false;
+    try {
+        sesionSincronizada = sessionStorage.getItem(SESION_KEY) === '1';
+    } catch (error) {
+        sesionSincronizada = false;
+    }
+
+    if (sesionSincronizada && storeHasCachedData(data())) {
         paint();
     } else if (contentEl) {
         contentEl.innerHTML = '<p class="muted">Cargando datos...</p>';
@@ -1374,6 +1428,11 @@
 
     // Cuando Firestore termina de responder, la seccion se actualiza sola.
     window.BusinessStore.ready?.then(() => {
+        try {
+            sessionStorage.setItem(SESION_KEY, '1');
+        } catch (error) {
+            // Si el navegador no permite sessionStorage, solo se pierde la mejora de velocidad.
+        }
         if (userIsEditing()) {
             refreshPending = true;
             return;

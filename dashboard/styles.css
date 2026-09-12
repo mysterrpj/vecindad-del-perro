@@ -259,6 +259,16 @@ p { color: var(--muted); }
     font-size: 13px;
 }
 
+.row-actions {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.row-actions .btn.compact { margin-top: 0; }
+.row-actions select { min-width: 118px; }
+
 .table-wrap {
     border: 1px solid var(--border);
     border-radius: 12px;
