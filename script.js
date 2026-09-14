@@ -71,11 +71,10 @@ contactForm?.addEventListener('submit', function (e) {
     const whatsappNumber = AJUSTES.whatsapp || window.CONFIG?.WHATSAPP_NUMBER || '51991845638';
     const whatsappText = [
         'Hola, quiero coordinar una cita para mi mascota.',
-        `Nombre: ${formData.name}`,
-        `Telefono: ${formData.phone}`,
-        `Mascota: ${formData.petName}`,
-        `Servicio: ${formData.service}`,
-        'Detalles adicionales (opcional):'
+        `*Nombre:* ${formData.name}`,
+        `*Telefono:* ${formData.phone}`,
+        `*Mascota:* ${formData.petName}`,
+        `*Servicio:* ${formData.service}`
     ].filter(Boolean).join('\n');
 
     showNotification('Abriremos WhatsApp para coordinar el horario de tu cita.');
